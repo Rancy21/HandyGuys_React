@@ -1,15 +1,70 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { User, Lock, Mail } from "lucide-react";
+import { useFetch } from "./useFetch ";
 
 const Login = () => {
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(false);
   const [isLogin, setIsLogin] = useState(true);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [name, setName] = useState("");
 
-  const handleSubmit = (e) => {
+   const [userData, setData] = useState(null); // State to store data
+
+
+  // const handleSubmit = async () => {
+  //   const { data, error, loading } = useFetch("http://localhost:8080/users/getUser?email=" + email);
+  //   setError(error);
+  //   setLoading(loading);
+
+  //   if (data != null) {
+  //     if (data.password == password) {
+  //       // User is authenticated
+  //       localStorage.setItem("token", data.token);
+  //       console.log("user: " + data);
+  //       setError()
+  //     } else {
+  //       setError("Incorrect password");
+  //     }
+  //   } else {
+  //     setError("User not found");
+  //   }
+  // };
+
+  const url = 
+
+  const handleSubmit = (e) =>{
     e.preventDefault();
-    console.log(isLogin ? "Login" : "Signup", { email, password, name });
+    setLoading(true);
+    setError(false);
+    setIsLogin(true);
+
+      // async function getUser(){
+      //   await fetch(`http://localhost:8080/users/getUser?email=${email}`,{
+      //     method: 'GET',
+      //     headers: {
+      //       'Content-Type': 'application/json'
+      //     }
+      //   })
+      //   .then((response) => {
+      //     return response.json();
+      //   })
+      //   .then((result) => {
+      //     if(result.length >= 0){
+      //       setData(result);
+      //       setLoading(false);
+      //       console.log("user: ", userData);
+      //     }else{
+      //       setError(true);
+      //       setLoading(false);
+      //     }
+      //   }).catch((error => {
+      //     setError(true);
+      //     setLoading(false);
+      //     console.error("Error fetching data: ", error);
+      //   }));
+      // }
+    // getUser();
   };
 
   const styles = {
@@ -118,6 +173,8 @@ const Login = () => {
             {isLogin ? "Login to HandyGuys" : "Create an Account"}
           </h2>
 
+          <p style={{ color: "red", marginBottom: "0.5rem" }}>Error: {error}</p>
+          <p>Loading state: {loading ? "Loading" : "not loading"}</p>
           <form onSubmit={handleSubmit}>
             {!isLogin && (
               <div style={styles.inputContainer}>
