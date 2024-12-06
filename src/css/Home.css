@@ -1,0 +1,188 @@
+.search-bar {
+  max-width: 500px;
+  margin: 20px auto;
+  background-color: #e0e0e0;
+  padding: 10px;
+  border-radius: 25px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.search-bar input {
+  flex: 1;
+  padding: 8px;
+  border: none;
+  background: transparent;
+  font-size: 16px;
+  outline: none;
+}
+
+.search-button {
+  background-color: #408953;
+  color: white;
+  border: none;
+  padding: 8px 20px;
+  border-radius: 20px;
+  cursor: pointer;
+}
+
+.search-button:hover {
+  background-color: #24482e;
+}
+
+.section {
+  background-color: #eee;
+  padding: 20px;
+  border-radius: 12px;
+  margin-top: 20px;
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.section-header h2 {
+  color: #1c3b6a;
+}
+
+.see-more {
+  color: #1a75ff;
+  text-decoration: none;
+}
+
+.helper-cards {
+  display: flex;
+  gap: 20px;
+}
+
+.helper-card {
+  background-color: white;
+  padding: 20px;
+  border-radius: 12px;
+  width: 280px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  transition: transform 0.2s ease;
+}
+
+.helper-card:hover {
+  transform: translateY(-4px);
+}
+
+.helper-name {
+  font-size: 18px;
+  font-weight: 600;
+  color: #2c3e50;
+  margin-bottom: 8px;
+}
+
+.helper-profession {
+  color: #1a75ff;
+  font-size: 14px;
+  margin-bottom: 16px;
+}
+
+.helper-stats {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+  font-size: 14px;
+}
+
+.helper-rating {
+  color: #2c3e50;
+}
+
+.rating-stars {
+  color: #ffd700;
+  margin-right: 4px;
+}
+
+.helper-reviews {
+  color: #666;
+}
+
+.helper-description {
+  font-size: 14px;
+  color: #666;
+  line-height: 1.4;
+  margin-bottom: 16px;
+  min-height: 140px;
+  max-height: 140px; /* Ensures a consistent height */
+  overflow-y: auto;
+  /* scrollbar-width: none; Hides scrollbar on Firefox */
+}
+
+.helper-description::-webkit-scrollbar {
+  display: none; /* Hides scrollbar on WebKit browsers */
+}
+
+/* Show scrollbar when hovering */
+.helper-description:hover::-webkit-scrollbar {
+  display: block;
+  width: 8px;
+}
+
+.helper-description:hover::-webkit-scrollbar-thumb {
+  background: #5ca8d2; /* Thumb color */
+  border-radius: 8px;
+}
+
+.helper-description:hover::-webkit-scrollbar-track {
+  background: #f0f0f0; /* Track color */
+  border-radius: 8px;
+}
+
+.chat-button {
+  background-color: #275e36;
+  color: white;
+  border: none;
+  padding: 12px;
+  width: 100%;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  font-size: 14px;
+}
+
+.chat-button:hover {
+  background-color: #337845;
+}
+
+.category-select {
+  appearance: none; /* Remove default browser styling */
+  padding: 7px 40px 7px 15px; /* More spacious padding */
+  font-size: 16px;
+  border: 2px solid #408953; /* Match app's green theme */
+  border-radius: 12px;
+  background-color: white;
+  color: #2c3e50;
+  margin-bottom: 20px;
+  width: 250px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23408953' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+}
+
+.category-select:hover {
+  border-color: #2e613c;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.15);
+}
+
+.category-select:focus {
+  outline: none;
+  border-color: #1c3b6a;
+  box-shadow: 0 0 0 3px rgba(64, 137, 83, 0.2);
+}
+
+.category-select option {
+  background-color: white;
+  color: #2c3e50;
+  padding: 10px;
+}
