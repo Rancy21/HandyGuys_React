@@ -1,8 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { User, Lock, Mail } from "lucide-react";
-import { useFetch } from "./useFetch ";
+import { getToday } from "../components/Helper";
+import { useNavigate } from "react-router";
 
 const Login = () => {
+  const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
   const [isLogin, setIsLogin] = useState(true);
@@ -10,25 +12,6 @@ const Login = () => {
   const [password, setPassword] = useState("");
 
   const [userData, setData] = useState(null); // State to store data
-
-  // const handleSubmit = async () => {
-  //   const { data, error, loading } = useFetch("http://localhost:8080/users/getUser?email=" + email);
-  //   setError(error);
-  //   setLoading(loading);
-
-  //   if (data != null) {
-  //     if (data.password == password) {
-  //       // User is authenticated
-  //       localStorage.setItem("token", data.token);
-  //       console.log("user: " + data);
-  //       setError()
-  //     } else {
-  //       setError("Incorrect password");
-  //     }
-  //   } else {
-  //     setError("User not found");
-  //   }
-  // };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -47,6 +30,7 @@ const Login = () => {
         }
       );
       if (!response.ok) {
+        setError("Sorry, something went wrong");
         throw new Error(`HTTP error! status: ${response.status}`);
       }
       const data = await response.json();
@@ -54,7 +38,34 @@ const Login = () => {
       if (data.password === password) {
         localStorage.setItem("token", data.token);
         console.log("User authenticated");
+
+        const tracker = {
+          date : getToday(),
+        };
+
+        const response2 = await fetch(
+          `http://localhost:8080/loginTracker/saveTracker?userEmail=${email}`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(tracker)
+          }
+        );
+        if (!response2.ok) {
+          setError("Sorry, something went wrong");
+          throw new Error(`${getToday()} HTTP error! status: ${response.status}`);
+
+        }
+        else{
+          console.log("Tracker saved");
+          
+        }
+
+        console.log(data)
         setError(false);
+        navigate("/home");
       } else {
         setError(true);
         console.log("Incorrect password");
@@ -173,8 +184,7 @@ const Login = () => {
             {isLogin ? "Login to HandyGuys" : "Create an Account"}
           </h2>
 
-          <p style={{ color: "red", marginBottom: "0.5rem" }}>Error: {error}</p>
-          <p>Loading state: {loading ? "Loading" : "not loading"}</p>
+          {error && <p style={{ color: "red", marginBottom: "0.5rem" }}>Error: {error}</p>}
           <form onSubmit={handleSubmit}>
             {!isLogin && (
               <div style={styles.inputContainer}>
