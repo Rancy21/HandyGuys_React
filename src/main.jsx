@@ -4,6 +4,6 @@ import "./index.css";
 import LoginPage from "./pages/Login.jsx";
 createRoot(document.getElementById("root")).render(
   <StrictMode>
-    <LoginPage />
+    <Login />
   </StrictMode>
 );
