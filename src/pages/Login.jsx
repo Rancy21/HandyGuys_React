@@ -9,8 +9,7 @@ const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-   const [userData, setData] = useState(null); // State to store data
-
+  const [userData, setData] = useState(null); // State to store data
 
   // const handleSubmit = async () => {
   //   const { data, error, loading } = useFetch("http://localhost:8080/users/getUser?email=" + email);
@@ -31,40 +30,39 @@ const Login = () => {
   //   }
   // };
 
-  const url = 
-
-  const handleSubmit = (e) =>{
+  const handleSubmit = (e) => {
     e.preventDefault();
     setLoading(true);
     setError(false);
     setIsLogin(true);
 
-      // async function getUser(){
-      //   await fetch(`http://localhost:8080/users/getUser?email=${email}`,{
-      //     method: 'GET',
-      //     headers: {
-      //       'Content-Type': 'application/json'
-      //     }
-      //   })
-      //   .then((response) => {
-      //     return response.json();
-      //   })
-      //   .then((result) => {
-      //     if(result.length >= 0){
-      //       setData(result);
-      //       setLoading(false);
-      //       console.log("user: ", userData);
-      //     }else{
-      //       setError(true);
-      //       setLoading(false);
-      //     }
-      //   }).catch((error => {
-      //     setError(true);
-      //     setLoading(false);
-      //     console.error("Error fetching data: ", error);
-      //   }));
-      // }
-    // getUser();
+    async function getUser() {
+      await fetch(`http://localhost:8080/users/getUser?email=${email}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+        .then((response) => {
+          return response.json();
+        })
+        .then((result) => {
+          if (result.length >= 0) {
+            setData(result);
+            setLoading(false);
+            console.log("user: ", userData);
+          } else {
+            setError(true);
+            setLoading(false);
+          }
+        })
+        .catch((error) => {
+          setError(true);
+          setLoading(false);
+          console.error("Error fetching data: ", error);
+        });
+    }
+    getUser();
   };
 
   const styles = {
