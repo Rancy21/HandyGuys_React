@@ -9,8 +9,7 @@ const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-   const [userData, setData] = useState(null); // State to store data
-
+  const [userData, setData] = useState(null); // State to store data
 
   // const handleSubmit = async () => {
   //   const { data, error, loading } = useFetch("http://localhost:8080/users/getUser?email=" + email);
@@ -31,28 +30,41 @@ const Login = () => {
   //   }
   // };
 
-  const handleSubmit = async (e) =>{
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
     setError(false);
     setIsLogin(true);
 
-    try{
-      const response = await fetch('http://localhost:8080/users/getUser?email=' + email);
+    try {
+      const response = await fetch(
+        `http://localhost:8080/users/getUser?email=${email}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
       const data = await response.json();
       setData(data);
-      if(data.password === password){
-        localStorage.setItem('token', data.token);
-        console.log('User authenticated');
+      if (data.password === password) {
+        localStorage.setItem("token", data.token);
+        console.log("User authenticated");
         setError(false);
       } else {
-        setError('Incorrect password');
+        setError(true);
+        console.log("Incorrect password");
       }
+    } catch (error) {
+      setError(true);
+      console.error("Error:", error);
+    } finally {
+      setLoading(false);
     }
-
   };
 
   const styles = {
