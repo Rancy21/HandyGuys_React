@@ -31,38 +31,28 @@ const Login = () => {
   //   }
   // };
 
-  const handleSubmit = (e) =>{
+  const handleSubmit = async (e) =>{
     e.preventDefault();
     setLoading(true);
     setError(false);
     setIsLogin(true);
 
-      async function getUser(){
-        await fetch(`http://localhost:8080/users/getUser?email=${email}`,{
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json'
-          }
-        })
-        .then((response) => {
-          return response.json();
-        })
-        .then((result) => {
-          if(result.length >= 0){
-            setData(result);
-            setLoading(false);
-            console.log("user: ", userData);
-          }else{
-            setError(true);
-            setLoading(false);
-          }
-        }).catch((error => {
-          setError(true);
-          setLoading(false);
-          console.error("Error fetching data: ", error);
-        }));
+    try{
+      const response = await fetch('http://localhost:8080/users/getUser?email=' + email);
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
       }
-      getUser();
+      const data = await response.json();
+      setData(data);
+      if(data.password === password){
+        localStorage.setItem('token', data.token);
+        console.log('User authenticated');
+        setError(false);
+      } else {
+        setError('Incorrect password');
+      }
+    }
+
   };
 
   const styles = {
