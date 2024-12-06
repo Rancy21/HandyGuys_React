@@ -3,6 +3,8 @@ import { User, Lock, Mail, Phone } from "lucide-react";
 import "../css/sign.css";
 
 const Signup = () => {
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(false);
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -11,20 +13,107 @@ const Signup = () => {
     password: "",
     confirmPassword: "",
     isHandy: false,
-    skills: [{ category: "", description: "" }],
+    skill: { category: "", description: "" },
   });
+
+  const [saved, setSaved] = useState(false);
 
   const [isLogin, setIsLogin] = useState(false);
 
   const categories = [
     "ELECTRICIAN",
-    "PLUMBER",
+    "Plumbing",
     "CARPENTER",
     "PAINTER",
     "GARDENER",
     "HVAC",
   ];
 
+  const saveUser = async () => {
+    setLoading(true);
+    const userData = {
+      email: formData.email,
+      firstName: formData.firstName,
+      lastName: formData.lastName,
+      phoneNumber: formData.phoneNumber,
+      password: formData.password,
+      isHandy: formData.isHandy,
+      signUpDate: "2024-12-04",
+    };
+
+    try {
+      const response = await fetch(`http://localhost:8080/users/saveUser`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(userData),
+      });
+
+      if (!response.ok) {
+        const responseError = await response.json();
+        throw new Error(
+          `HTTP error! status: ${response.status} ${responseError}`
+        );
+      }
+
+      const data = response.json();
+      // Handle successful response based on your backend's response structure
+      //   localStorage.setItem("token", data.token);
+      console.log(data);
+      console.log("user saved successfully");
+      setSaved(true);
+      setError(false);
+    } catch (error) {
+      setError(true);
+      console.error("Error:", error);
+    } finally {
+      setLoading(false);
+    }
+
+    return true;
+  };
+
+  const saveSkill = async () => {
+    setLoading(true);
+    const skillData = {
+      category: formData.skill.category,
+      description: formData.skill.description,
+    };
+
+    try {
+      const response = await fetch(
+        `http://localhost:8080/skill/saveSkill?email=${formData.email}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(skillData),
+        }
+      );
+
+      if (!response.ok) {
+        const responseError = await response.json();
+        throw new Error(
+          `HTTP error! status: ${response.status} ${responseError}`
+        );
+      }
+
+      const data = response.json();
+      // Handle successful response based on your backend's response structure
+      //   localStorage.setItem("token", data.token);
+      console.log(data);
+      console.log("user saved successfully");
+      setSaved(true);
+      setError(false);
+    } catch (error) {
+      setError(true);
+      console.error("Error:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
     setFormData((prev) => ({
@@ -33,20 +122,14 @@ const Signup = () => {
     }));
   };
 
-  const handleSkillChange = (index, e) => {
+  const handleSkillChange = (e) => {
     const { name, value } = e.target;
-    const newSkills = [...formData.skills];
-    newSkills[index][name] = value;
     setFormData((prev) => ({
       ...prev,
-      skills: newSkills,
-    }));
-  };
-
-  const addSkill = () => {
-    setFormData((prev) => ({
-      ...prev,
-      skills: [...prev.skills, { category: "", description: "" }],
+      skill: {
+        ...prev.skill,
+        [name]: value,
+      },
     }));
   };
 
@@ -57,6 +140,12 @@ const Signup = () => {
       return;
     }
     console.log(formData);
+    saveUser();
+    if (formData.isHandy) {
+      setLoading(true);
+      console.log("saving skill...");
+      saveSkill();
+    }
   };
 
   return (
@@ -166,41 +255,30 @@ const Signup = () => {
             </div>
 
             {formData.isHandy && (
-              <div>
-                {formData.skills.map((skill, index) => (
-                  <div key={index} className="signup-skill-container">
-                    <select
-                      name="category"
-                      value={skill.category}
-                      onChange={(e) => handleSkillChange(index, e)}
-                      className="signup-skill-category"
-                      required
-                    >
-                      <option value="">Select Category</option>
-                      {categories.map((cat) => (
-                        <option key={cat} value={cat}>
-                          {cat}
-                        </option>
-                      ))}
-                    </select>
-                    <textarea
-                      name="description"
-                      placeholder="Skill Description"
-                      value={skill.description}
-                      onChange={(e) => handleSkillChange(index, e)}
-                      className="signup-input"
-                      style={{ height: "100px" }}
-                      required
-                    />
-                  </div>
-                ))}
-                <button
-                  type="button"
-                  onClick={addSkill}
-                  className="signup-add-skill-button"
+              <div className="signup-skill-container">
+                <select
+                  name="category"
+                  value={formData.skill.category}
+                  onChange={handleSkillChange}
+                  className="signup-skill-category"
+                  required
                 >
-                  Add Another Skill
-                </button>
+                  <option value="">Select Category</option>
+                  {categories.map((cat) => (
+                    <option key={cat} value={cat}>
+                      {cat}
+                    </option>
+                  ))}
+                </select>
+                <textarea
+                  name="description"
+                  placeholder="Skill Description"
+                  value={formData.skill.description}
+                  onChange={handleSkillChange}
+                  className="signup-input"
+                  style={{ height: "100px" }}
+                  required
+                />
               </div>
             )}
 
