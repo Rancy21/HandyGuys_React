@@ -1,6 +1,7 @@
 import React from "react";
 import Sidebar from "../components/Sidebar";
 import "../css/Home.css";
+import HelperCard from "../components/HelperCard";
 
 const Home = () => {
   return (
@@ -31,6 +32,7 @@ const Home = () => {
             </a>
           </div>
           <div class="helper-cards">
+            <HelperCard name={"Paola Diele"} category={"Baddie"} description={"Born to slay!"}/>
             <div class="helper-card">
               <div class="helper-name">Basil Jones</div>
               <div class="helper-profession">Electrician</div>
