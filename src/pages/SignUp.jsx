@@ -26,7 +26,7 @@ const Signup = () => {
   const categories = [
     "ELECTRICIAN",
     "Plumbing",
-    "CARPENTER",
+    "Cleaning",
     "PAINTER",
     "GARDENER",
     "HVAC",
