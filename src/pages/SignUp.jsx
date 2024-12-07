@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { User, Lock, Mail, Phone } from "lucide-react";
 import "../css/sign.css";
 import { useNavigate } from "react-router";
@@ -7,6 +7,7 @@ import { getToday } from "../components/Helper";
 const Signup = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
   const [error, setError] = useState(false);
   const [canLogin, setCanLogin] = useState(false);
   const [formData, setFormData] = useState({
@@ -19,19 +20,47 @@ const Signup = () => {
     isHandy: false,
     skill: { category: "", description: "" },
   });
+  const [categories, setCategories] = useState([]);
+  useEffect(() => {
+    const getCategories = async () => {
+      try {
+        setLoading(true);
+        setError(false);
+
+        const response = await fetch(
+          "http://localhost:8080/skill/getCategories"
+        );
+
+        if (!response.ok) {
+          throw new Error(
+            `Failed to fetch categories: status: ${response.status}`
+          );
+        }
+
+        const result = await response.json();
+        setCategories(result);
+      } catch (error) {
+        setError(true);
+        setErrorMessage(error.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+    getCategories();
+  }, [categories]);
 
   const [saved, setSaved] = useState(false);
 
   const [isLogin, setIsLogin] = useState(false);
 
-  const categories = [
-    "ELECTRICIAN",
-    "Plumbing",
-    "Cleaning",
-    "PAINTER",
-    "GARDENER",
-    "HVAC",
-  ];
+  //   const categories = [
+  //     "ELECTRICIAN",
+  //     "Plumbing",
+  //     "Cleaning",
+  //     "PAINTER",
+  //     "GARDENER",
+  //     "HVAC",
+  //   ];
 
   const saveUser = async () => {
     setLoading(true);
