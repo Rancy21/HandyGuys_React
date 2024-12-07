@@ -9,6 +9,9 @@
   gap: 10px;
 }
 
+body {
+  overflow: hidden;
+}
 .search-bar input {
   flex: 1;
   padding: 8px;
