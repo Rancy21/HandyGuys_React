@@ -7,8 +7,10 @@ import { getToday } from "../components/Helper";
 const Signup = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
+  const [handy, setHandy] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [error, setError] = useState(false);
+  const [userSaved, setUserSaved] = useState(false);
   const [canLogin, setCanLogin] = useState(false);
   const [formData, setFormData] = useState({
     firstName: "",
@@ -89,15 +91,22 @@ const Signup = () => {
           `HTTP error! status: ${response.status} ${responseError}`
         );
       }
-
-      const data = response.json();
       // Handle successful response based on your backend's response structure
       //   localStorage.setItem("token", data.token);
-      console.log(data);
+      setUserSaved(true);
       console.log("user saved successfully");
-      setSaved(true);
       setCanLogin(true);
       setError(false);
+        if (handy) {
+          setCanLogin(false);
+          setLoading(true);
+          console.log("saving skill...");
+          
+          saveSkill();
+        }
+      setUserSaved(false);
+      console.log("user saved: ",userSaved);
+
     } catch (error) {
       setError(true);
       console.error("Error:", error);
@@ -133,14 +142,10 @@ const Signup = () => {
           `HTTP error! status: ${response.status} ${responseError}`
         );
       }
-
-      const data = response.json();
       // Handle successful response based on your backend's response structure
       //   localStorage.setItem("token", data.token);
-      console.log(data);
       console.log("skill saved successfully");
       setCanLogin(true);
-      setSaved(true);
       setError(false);
     } catch (error) {
       setError(true);
@@ -158,6 +163,7 @@ const Signup = () => {
   };
 
   const handleSkillChange = (e) => {
+    setHandy(e.target.value);
     const { name, value } = e.target;
     setFormData((prev) => ({
       ...prev,
@@ -176,16 +182,13 @@ const Signup = () => {
     }
     console.log(formData);
     saveUser();
-    if (formData.isHandy) {
-      setCanLogin(false);
-      setLoading(true);
-      console.log("saving skill...");
-      saveSkill();
-    }
+    console.log("user saved: ",userSaved);
 
-    if (canLogin) {
-      navigate("/home");
-    }
+    
+
+    // if (canLogin) {
+    //   navigate("/home");
+    // }
   };
 
   return (
