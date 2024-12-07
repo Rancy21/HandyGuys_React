@@ -1,9 +1,44 @@
-import React from "react";
+import React, { useState, useEffect  } from "react";
 import Sidebar from "../components/Sidebar";
 import "../css/Home.css";
 import HelperCard from "../components/HelperCard";
 
 const Home = () => {
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(false);
+  const [userData, setData] = useState(null); // State to store data
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch(
+          `http://localhost:8080/skill/getAllSkills`,
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
+        if (!response.ok) {
+          setError("Sorry, something went wrong");
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const data = await response.json();
+        setData(data);
+        
+          console.log(data);
+          setError(false);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      } finally {
+        setLoading(false); // Stop loading spinner
+      }
+    };
+
+    fetchData();
+  }, []);
+  
   return (
     <>
       <Sidebar></Sidebar>
@@ -25,6 +60,7 @@ const Home = () => {
         </div>
 
         <div class="section">
+          {error}
           <div class="section-header">
             <h2>Featured helpers</h2>
             <a href="#" class="see-more">
