@@ -11,7 +11,7 @@ const router = createBrowserRouter([
   },
   {
     path: "/home",
-    element: <Home></Home>,
+    element: <Home />,
   },
   {
     path: "/sign",

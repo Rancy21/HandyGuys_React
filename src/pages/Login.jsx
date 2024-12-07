@@ -16,7 +16,6 @@ const Login = () => {
     e.preventDefault();
     setLoading(true);
     setError(false);
-    setIsLogin(true);
 
     try {
       const response = await fetch(
