@@ -1,10 +1,13 @@
 import React, { useState } from "react";
 import { User, Lock, Mail, Phone } from "lucide-react";
 import "../css/sign.css";
+import { useNavigate } from "react-router";
 
 const Signup = () => {
+  const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
+  const [canLogin, setCanLogin] = useState(false);
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -63,6 +66,7 @@ const Signup = () => {
       console.log(data);
       console.log("user saved successfully");
       setSaved(true);
+      setCanLogin(true);
       setError(false);
     } catch (error) {
       setError(true);
@@ -104,7 +108,8 @@ const Signup = () => {
       // Handle successful response based on your backend's response structure
       //   localStorage.setItem("token", data.token);
       console.log(data);
-      console.log("user saved successfully");
+      console.log("skill saved successfully");
+      setCanLogin(true);
       setSaved(true);
       setError(false);
     } catch (error) {
@@ -142,9 +147,14 @@ const Signup = () => {
     console.log(formData);
     saveUser();
     if (formData.isHandy) {
+      setCanLogin(false);
       setLoading(true);
       console.log("saving skill...");
       saveSkill();
+    }
+
+    if (canLogin) {
+      navigate("/home");
     }
   };
 
