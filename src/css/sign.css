@@ -19,6 +19,10 @@
   bottom: 0;
 }
 
+body {
+  overflow: visible;
+}
+
 .signup-sidebar-content h1 {
   font-size: 2.5rem;
   font-weight: bold;
