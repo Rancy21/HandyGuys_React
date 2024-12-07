@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { User, Lock, Mail, Phone } from "lucide-react";
 import "../css/sign.css";
 import { useNavigate } from "react-router";
+import { getToday } from "../components/Helper";
 
 const Signup = () => {
   const navigate = useNavigate();
@@ -41,7 +42,7 @@ const Signup = () => {
       phoneNumber: formData.phoneNumber,
       password: formData.password,
       isHandy: formData.isHandy,
-      signUpDate: "2024-12-04",
+      signUpDate: getToday(),
     };
 
     try {
