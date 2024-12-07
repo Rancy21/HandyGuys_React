@@ -101,6 +101,9 @@
   color: #1c3b6a;
   font-weight: bold;
   cursor: pointer;
+  transition: color 0.3s;
+  text-decoration: none;
+  margin-left: 4px;
 }
 
 .signup-name-container {

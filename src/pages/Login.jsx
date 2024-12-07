@@ -7,7 +7,6 @@ const Login = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
-  const [isLogin, setIsLogin] = useState(true);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -40,7 +39,7 @@ const Login = () => {
         console.log("User authenticated");
 
         const tracker = {
-          date : getToday(),
+          date: getToday(),
         };
 
         const response2 = await fetch(
@@ -50,20 +49,19 @@ const Login = () => {
             headers: {
               "Content-Type": "application/json",
             },
-            body: JSON.stringify(tracker)
+            body: JSON.stringify(tracker),
           }
         );
         if (!response2.ok) {
           setError("Sorry, something went wrong");
-          throw new Error(`${getToday()} HTTP error! status: ${response.status}`);
-
-        }
-        else{
+          throw new Error(
+            `${getToday()} HTTP error! status: ${response.status}`
+          );
+        } else {
           console.log("Tracker saved");
-          
         }
 
-        console.log(data)
+        console.log(data);
         setError(false);
         navigate("/home");
       } else {
@@ -156,6 +154,7 @@ const Login = () => {
       color: "#1c3b6a",
       fontWeight: "bold",
       cursor: "pointer",
+      textDecoration: "none",
     },
   };
 
@@ -180,26 +179,14 @@ const Login = () => {
 
       <div style={styles.formContainer}>
         <div style={styles.formWrapper}>
-          <h2 style={styles.formTitle}>
-            {isLogin ? "Login to HandyGuys" : "Create an Account"}
-          </h2>
+          <h2 style={styles.formTitle}>Login to HandyGuyss</h2>
 
-          {error && <p style={{ color: "red", marginBottom: "0.5rem" }}>Error: {error}</p>}
+          {error && (
+            <p style={{ color: "red", marginBottom: "0.5rem" }}>
+              Error: {error}
+            </p>
+          )}
           <form onSubmit={handleSubmit}>
-            {!isLogin && (
-              <div style={styles.inputContainer}>
-                <User style={styles.icon} />
-                <input
-                  type="text"
-                  placeholder="Full Name"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  style={styles.input}
-                  required={!isLogin}
-                />
-              </div>
-            )}
-
             <div style={styles.inputContainer}>
               <Mail style={styles.icon} />
               <input
@@ -236,21 +223,16 @@ const Login = () => {
                   styles.submitButton.backgroundColor)
               }
             >
-              {isLogin ? "Login" : "Sign Up"}
+              Login
             </button>
           </form>
 
           <div style={styles.switchText}>
             <p>
-              {isLogin
-                ? "Don't have an account? "
-                : "Already have an account? "}
-              <span
-                style={styles.switchLink}
-                onClick={() => setIsLogin(!isLogin)}
-              >
-                {isLogin ? "Sign Up" : "Login"}
-              </span>
+              Don't have an account?{" "}
+              <a href="/sign" style={styles.switchLink}>
+                SignUp
+              </a>
             </p>
           </div>
         </div>

@@ -290,13 +290,9 @@ const Signup = () => {
           <div className="signup-switch-text">
             <p>
               Already have an account?
-              <span
-                className="signup-switch-link"
-                onClick={() => setIsLogin(!isLogin)}
-              >
-                {" "}
+              <a href="/" className="signup-switch-link">
                 Login
-              </span>
+              </a>
             </p>
           </div>
         </div>
