@@ -1,44 +1,69 @@
-import React, { useState, useEffect  } from "react";
+import React, { useState, useEffect } from "react";
 import Sidebar from "../components/Sidebar";
 import "../css/Home.css";
 import HelperCard from "../components/HelperCard";
+import { toast } from "react-toastify";
+import axios from "axios";
 
 const Home = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
   const [userData, setData] = useState(null); // State to store data
+  const [categories, setCategories] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch(
-          `http://localhost:8080/skill/getAllSkills`,
+        setLoading(true);
+        const response = await axios.get(
+          "http://localhost:8080/skill/getAllSkills",
           {
-            method: "GET",
             headers: {
               "Content-Type": "application/json",
             },
           }
         );
-        if (!response.ok) {
-          setError("Sorry, something went wrong");
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        const data = await response.json();
-        setData(data);
-        
-          console.log(data);
-          setError(false);
+
+        setData(response.data);
+        console.log(response.data);
+        setError(false);
       } catch (error) {
         console.error("Error fetching data:", error);
+        setError({
+          status: true,
+          message: error.response?.data || "Sorry, something went wrong",
+        });
       } finally {
-        setLoading(false); // Stop loading spinner
+        setLoading(false);
       }
     };
 
     fetchData();
   }, []);
-  
+
+  // Fetch categories on component mount
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        setLoading(true);
+        const response = await axios.get(
+          "http://localhost:8080/skill/getCategories"
+        );
+        setCategories(response.data);
+      } catch (fetchError) {
+        setError({
+          status: true,
+          message: fetchError.response?.data || "Failed to fetch categories",
+        });
+        toast.error("Error fetching categories");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchCategories();
+  }, []);
+
   return (
     <>
       <Sidebar></Sidebar>
@@ -60,7 +85,12 @@ const Home = () => {
         </div>
 
         <div class="section">
-          {error}
+          {/* Render error message if error exists */}
+          {error && typeof error === "object" ? (
+            <div className="error-message">{error.message}</div>
+          ) : (
+            error && <div className="error-message">{error}</div>
+          )}
           <div class="section-header">
             <h2>Featured helpers</h2>
             <a href="#" class="see-more">
@@ -68,7 +98,11 @@ const Home = () => {
             </a>
           </div>
           <div class="helper-cards">
-            <HelperCard name={"Paola Diele"} category={"Baddie"} description={"Born to slay!"}/>
+            <HelperCard
+              name={"Paola Diele"}
+              category={"Baddie"}
+              description={"Born to slay!"}
+            />
             <div class="helper-card">
               <div class="helper-name">Basil Jones</div>
               <div class="helper-profession">Electrician</div>
@@ -119,10 +153,11 @@ const Home = () => {
           </div>
           <select class="category-select">
             <option value="">Select Category</option>
-            <option value="electrician">Electrician</option>
-            <option value="plumber">Plumber</option>
-            <option value="carpenter">Carpenter</option>
-            <option value="painter">Painter</option>
+            {categories.map((cat) => (
+              <option key={cat} value={cat}>
+                {cat}
+              </option>
+            ))}
           </select>
           <div class="helper-cards">
             <div class="helper-card">
