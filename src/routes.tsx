@@ -5,6 +5,7 @@ import Home from "./Pages/Home.jsx";
 import Profile from "./Pages/Profile.jsx";
 import Signup from "./pages/SignUp.jsx";
 import Review from "./pages/Review.jsx";
+import ReviewsList from "./pages/ReviewsList.jsx";
 
 const router = createBrowserRouter([
   {
@@ -26,6 +27,10 @@ const router = createBrowserRouter([
   {
     path: "/review",
     element: <Review />,
+  },
+  {
+    path: "/reviewsList",
+    element: <ReviewsList />,
   },
 ]);
 
