@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { User, Lock, Mail, Phone } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router";
 import "../css/sign.css";
 import { getToday } from "../components/Helper";
+import { toast, ToastContainer } from "react-toastify";
 
 const Signup = () => {
   const navigate = useNavigate();
@@ -41,6 +42,7 @@ const Signup = () => {
           status: true,
           message: fetchError.response?.data || "Failed to fetch categories",
         });
+        toast.error("Error fetching categories");
       } finally {
         setLoading(false);
       }
@@ -83,6 +85,7 @@ const Signup = () => {
         skillData
       );
     } catch (skillError) {
+      toast.error("Error saving skill");
       throw new Error(skillError.response?.data || "Failed to save skill");
     }
   };
@@ -108,8 +111,10 @@ const Signup = () => {
       }
 
       // Navigate to login page
+      toast.success("User saved successfully");
       navigate("/");
     } catch (saveError) {
+      toast.error("Failed to save user");
       setError({
         status: true,
         message: saveError.response?.data || "Failed to save user",
@@ -157,6 +162,7 @@ const Signup = () => {
 
   return (
     <div className="signup-container">
+      <ToastContainer />
       <div className="signup-sidebar">
         <div className="signup-sidebar-content">
           <h1>HandyGuys</h1>
@@ -178,8 +184,130 @@ const Signup = () => {
           )}
 
           <form onSubmit={handleSubmit}>
-            {/* Form inputs remain the same as in the previous version */}
-            {/* ... (rest of the component remains unchanged) ... */}
+            <div className="signup-name-container">
+              <div className="signup-input-container" style={{ flex: 1 }}>
+                <User className="signup-icon" />
+                <input
+                  type="text"
+                  placeholder="First Name"
+                  name="firstName"
+                  value={formData.firstName}
+                  onChange={handleChange}
+                  className="signup-input"
+                  required
+                />
+              </div>
+              <div className="signup-input-container" style={{ flex: 1 }}>
+                <User className="signup-icon" />
+                <input
+                  type="text"
+                  placeholder="Last Name"
+                  name="lastName"
+                  value={formData.lastName}
+                  onChange={handleChange}
+                  className="signup-input"
+                  required
+                />
+              </div>
+            </div>
+
+            {/* Email Input */}
+            <div className="signup-input-container">
+              <Mail className="signup-icon" />
+              <input
+                type="email"
+                placeholder="Email Address"
+                name="email"
+                value={formData.email}
+                onChange={handleChange}
+                className="signup-input"
+                required
+              />
+            </div>
+
+            {/* Phone Input */}
+            <div className="signup-input-container">
+              <Phone className="signup-icon" />
+              <input
+                type="tel"
+                placeholder="Phone Number"
+                name="phoneNumber"
+                value={formData.phoneNumber}
+                onChange={handleChange}
+                className="signup-input"
+                required
+              />
+            </div>
+
+            {/* Password Inputs */}
+            <div className="signup-input-container">
+              <Lock className="signup-icon" />
+              <input
+                type="password"
+                placeholder="Password"
+                name="password"
+                value={formData.password}
+                onChange={handleChange}
+                className="signup-input"
+                required
+              />
+            </div>
+
+            <div className="signup-input-container">
+              <Lock className="signup-icon" />
+              <input
+                type="password"
+                placeholder="Confirm Password"
+                name="confirmPassword"
+                value={formData.confirmPassword}
+                onChange={handleChange}
+                className="signup-input"
+                required
+              />
+            </div>
+
+            {/* Service Provider Checkbox */}
+            <div style={{ marginBottom: "1rem" }}>
+              <label>
+                <input
+                  type="checkbox"
+                  name="isHandy"
+                  checked={formData.isHandy}
+                  onChange={handleChange}
+                  className="signup-checkbox"
+                />
+                Are you a service provider?
+              </label>
+            </div>
+
+            {/* Skill Selection (Conditionally Rendered) */}
+            {formData.isHandy && (
+              <div className="signup-skill-container">
+                <select
+                  name="category"
+                  value={formData.skill.category}
+                  onChange={handleSkillChange}
+                  className="signup-skill-category"
+                  required
+                >
+                  <option value="">Select Category</option>
+                  {categories.map((cat) => (
+                    <option key={cat} value={cat}>
+                      {cat}
+                    </option>
+                  ))}
+                </select>
+                <textarea
+                  name="description"
+                  placeholder="Skill Description"
+                  value={formData.skill.description}
+                  onChange={handleSkillChange}
+                  className="signup-input"
+                  style={{ height: "100px" }}
+                  required
+                />
+              </div>
+            )}
 
             {/* Submit Button */}
             <button
