@@ -5,11 +5,13 @@ import Home from "./Pages/Home.jsx";
 import Profile from "./Pages/Profile.jsx";
 import Signup from "./pages/SignUp.jsx";
 import ResetPassword from "./pages/ResetPassword.jsx";
+import Review from "./pages/Review.jsx";
+import ReviewsList from "./pages/ReviewsList.jsx";
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <ResetPassword />,
+    element: <Login />,
   },
   {
     path: "/reset",

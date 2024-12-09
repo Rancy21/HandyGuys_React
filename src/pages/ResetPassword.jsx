@@ -1,8 +1,12 @@
 import React, { useState } from "react";
 import { Lock, Mail } from "lucide-react";
 import axios from "axios";
+import { toast, ToastContainer } from "react-toastify";
+import { useNavigate } from "react-router";
 
 const ResetPassword = () => {
+    const navigate = useNavigate();
+
     const [isStep1, setSetp1] = useState(true);
     const [isStep2, setSetp2] = useState(false);
     const [isStep3, setSetp3] = useState(false);
@@ -12,8 +16,8 @@ const ResetPassword = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
-    const [OTP, setOTP] = useState();
-    const [serverOTP, setServerOTP] = useState();
+    const [OTP, setOTP] = useState("");
+    const [serverOTP, setServerOTP] = useState(0);
 
     const handleSubmit1 = async (e) => {
         e.preventDefault();
@@ -42,29 +46,10 @@ const ResetPassword = () => {
           else{
             const getOtp = await axios.get(`http://localhost:8080/users/sendOTPbyEmail?to=${email}`);
             setServerOTP(getOtp.data.otp);
-            console.log("OTP sent " + serverOTP);
+            console.log("OTP sent " + getOtp.data.otp);
             setSetp1(false);
             setSetp2(true);
-            // const response2 = await fetch(
-            //     `http://localhost:8080/users/sendOTPbyEmail?to=${email}`,
-            //     {
-            //       method: "GET",
-            //       headers: {
-            //         "Content-Type": "application/json",
-            //       },
-            //     }
-            //   );
-            //    if (!response2.ok) {
-            //     setErrorMessage("Sorry, something went wrong");
-            //     throw new Error(`HTTP error! status: ${response.status}`);
-            //   }
-            //   else{
-            //     const data = await response2.json();
-            //     setServerOTP(data.OTP);
-            //     console.log("OTP sent " + serverOTP);
-            //     setSetp1(false);
-            //     setSetp2(true);
-            //   }
+
           }
         }catch (error) {
         setError(true);
@@ -72,15 +57,38 @@ const ResetPassword = () => {
       }
         
     }
-    const handleSubmit2 = (e) => {
+    const handleSubmit2 = async (e) => {
         e.preventDefault();
-        setSetp2(false);
-        setSetp3(true);
+        if(OTP == serverOTP) {
+            setSetp2(false);
+            setSetp3(true);
+        }else {
+            setError(true);
+            setErrorMessage("Invalid OTP");
+        }
     }
-    const handleSubmit3 = (e) => {
+    const handleSubmit3 = async (e) => {
         e.preventDefault();
-        setSetp3(false);
-        setSetp1(true);
+        setError(false);
+        if (password!== confirmPassword) {
+            toast.error("Passwords do not match");
+            return;
+        }
+        const data = {
+            password: password,
+        };
+        try {
+            await axios.post(
+              `http://localhost:8080/users/updatePassword?email=${email}`,
+              data
+            );
+          } catch (error) {
+            toast.error("Error updating password");
+            throw new Error(error.response?.data || "Failed to update password");
+          }
+        
+        toast.success("Password updated successfully");
+        navigate("/");
     }
 
     const styles = {
@@ -167,6 +175,7 @@ const ResetPassword = () => {
 
   return (
     <div style={styles.container}>
+        <ToastContainer />
       <div style={styles.sidebar}>
         <div>
           <h1
@@ -194,6 +203,14 @@ const ResetPassword = () => {
           <h2 style={styles.formTitle}>Reset password</h2>
         {isStep1 && (
         <form onSubmit={handleSubmit1}>
+
+        <div className="login-switchText">
+            <p>
+                Enter your email address and we will send you a 
+                one time password to confirm your address. 
+                </p><br />
+          </div>
+
             <div style={styles.inputContainer}>
                 <Mail style={styles.icon} />
                 <input
@@ -204,9 +221,7 @@ const ResetPassword = () => {
                     style={styles.input}
                     required />
             </div>
-
-            <p>Enter your email address and we will send you a one time password to confirm your address. </p><br />
-
+            
             <button
                 type="submit"
                 style={styles.submitButton}
