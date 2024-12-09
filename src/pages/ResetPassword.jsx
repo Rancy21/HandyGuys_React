@@ -3,6 +3,7 @@ import { Lock, Mail } from "lucide-react";
 import axios from "axios";
 import { toast, ToastContainer } from "react-toastify";
 import { useNavigate } from "react-router";
+import ClipLoader from 'react-spinners/ClipLoader';
 
 const ResetPassword = () => {
     const navigate = useNavigate();
@@ -13,6 +14,8 @@ const ResetPassword = () => {
 
     const [error, setError] = useState(false);
     const [errorMessage, setErrorMessage] = useState("");
+    const [loading, setLoading] = useState(false);
+
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
@@ -22,6 +25,7 @@ const ResetPassword = () => {
     const handleSubmit1 = async (e) => {
         e.preventDefault();
         setError(false);
+        setLoading(true);
     
         try {
 
@@ -37,10 +41,12 @@ const ResetPassword = () => {
           if (response.status == 404)
           {
             setErrorMessage("Email not found");
+            setLoading(false);
             throw new Error("Email not found");
           }
           else if (!response.ok) {
             setErrorMessage("Sorry, something went wrong");
+            setLoading(false);
             throw new Error(`HTTP error! status: ${response.status}`);
           }
           else{
@@ -49,10 +55,12 @@ const ResetPassword = () => {
             console.log("OTP sent " + getOtp.data.otp);
             setSetp1(false);
             setSetp2(true);
+            setLoading(false);
 
           }
         }catch (error) {
         setError(true);
+        setLoading(false);
         console.error("Error:", error);
       }
         
@@ -78,15 +86,17 @@ const ResetPassword = () => {
             password: password,
         };
         try {
+            setLoading(true);
             await axios.post(
               `http://localhost:8080/users/updatePassword?email=${email}`,
               data
             );
           } catch (error) {
             toast.error("Error updating password");
+            setLoading(false);
             throw new Error(error.response?.data || "Failed to update password");
           }
-        
+          setLoading(false);
         toast.success("Password updated successfully");
         navigate("/");
     }
@@ -171,11 +181,23 @@ const ResetPassword = () => {
           cursor: "pointer",
           textDecoration: "none",
         },
+        spinner: {
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+        },
       };
 
   return (
-    <div style={styles.container}>
+    <>
+    {loading ? (
+        <div className="spinner">
+          <ClipLoader color="#3498db" loading={loading} size={50} />
+        </div>
+      ) : (
+        <div style={styles.container}>
         <ToastContainer />
+        
       <div style={styles.sidebar}>
         <div>
           <h1
@@ -300,6 +322,9 @@ const ResetPassword = () => {
         </div>
       </div>
     </div>
+      )}
+    
+    </>
   )
 }
 
