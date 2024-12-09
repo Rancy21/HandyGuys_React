@@ -112,6 +112,13 @@ const Login = () => {
               </a>
             </p>
           </div>
+          <div className="login-switchText">
+            <p>
+              <a href="/reset" className="login-switchLink">
+              Forgot Password?
+              </a>
+            </p>
+          </div>
         </div>
       </div>
     </div>

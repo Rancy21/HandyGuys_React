@@ -4,6 +4,7 @@ import Login from "../src/pages/Login.jsx";
 import Home from "./Pages/Home.jsx";
 import Profile from "./Pages/Profile.jsx";
 import Signup from "./pages/SignUp.jsx";
+import ResetPassword from "./pages/ResetPassword.jsx";
 import Review from "./pages/Review.jsx";
 import ReviewsList from "./pages/ReviewsList.jsx";
 import Helpers from "./admin pages/Helpers.jsx";
