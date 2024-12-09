@@ -18,27 +18,27 @@ const Review = () => {
   const [updated, setUpdated] = useState(true);
   const [existing, setExisting] = useState({
     comment: "",
-    rating: 0,
+    rating: 0
   });
 
   useEffect(() => {
     const fetchSkill = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:8080/skill/getSkill?id=f42c0ac3-8a58-479e-97d5-c0419f7954e9" // Replace with route params
+          "http://localhost:8080/skill/getSkill?id=555d8fcb-b61b-11ef-a146-5cb901ae679c" // Replace with route params
         );
         setSkill(response.data);
         setHandy(response.data.handyGuy);
 
         const fetchReview = await axios.get(
-          `http://localhost:8080/review/getReview?email=larr@gmail.com&id=f42c0ac3-8a58-479e-97d5-c0419f7954e9` // Replace with route params
+          `http://localhost:8080/review/getReview?email=larr@gmail.com&id=${response.data.id}` // Replace with route params
         );
         if (fetchReview.data) {
           setRating(fetchReview.data.rating);
           setComment(fetchReview.data.review);
           setExisting({
             comment: fetchReview.data.review,
-            rating: fetchReview.data.rating,
+            rating: fetchReview.data.rating
           });
           setUpdated(false);
         }
@@ -80,7 +80,7 @@ const Review = () => {
     const reviewData = {
       review: comment,
       rating,
-      date: getToday(),
+      date: getToday()
     };
     try {
       const response = await axios.post(
@@ -89,11 +89,9 @@ const Review = () => {
       );
       toast.success(response.data);
       setSuccess(response.data); // Added success message update
-      setRating(0);
-      setComment("");
       setExisting({
         comment: "",
-        rating: 0,
+        rating: 0
       });
       setUpdated(false);
     } catch (error) {
@@ -102,6 +100,16 @@ const Review = () => {
       setLoading(false);
     }
   };
+
+  if (skill) {
+    if (skill.category === "Electrical_repair") {
+      skill.category = "Electrical Repair";
+    } else if (skill.category === "Event_Planing") {
+      skill.category = "Event Planing";
+    } else if (skill.category === "WoodWorking") {
+      skill.category = "Wood Working";
+    }
+  }
 
   return (
     <>
