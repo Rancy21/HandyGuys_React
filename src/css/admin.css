@@ -1,0 +1,18 @@
+/* styles.css */
+.table-header-content {
+  width: fit-content;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.table-header-content span {
+  width: fit-content;
+  font-size: 15px;
+}
+.search-input input {
+  width: 120px;
+  padding: 5px;
+  border-radius: 10%;
+}

@@ -6,32 +6,37 @@ import Profile from "./Pages/Profile.jsx";
 import Signup from "./pages/SignUp.jsx";
 import Review from "./pages/Review.jsx";
 import ReviewsList from "./pages/ReviewsList.jsx";
+import Helpers from "./admin pages/Helpers.jsx";
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <Login></Login>,
+    element: <Login></Login>
   },
   {
     path: "/home",
-    element: <Home />,
+    element: <Home />
   },
   {
     path: "/sign",
-    element: <Signup />,
+    element: <Signup />
   },
   {
     path: "/profile",
-    element: <Profile />,
+    element: <Profile />
   },
   {
     path: "/review",
-    element: <Review />,
+    element: <Review />
   },
   {
     path: "/reviewsList",
-    element: <ReviewsList />,
+    element: <ReviewsList />
   },
+  {
+    path: "/helpers",
+    element: <Helpers />
+  }
 ]);
 
 export default router;
