@@ -11,3 +11,11 @@ body {
   min-height: 100vh;
   /* overflow: hidden; Prevent body scrolling */
 }
+
+.custom-toast {
+  max-width: 100px; /* Adjust the width */
+  margin: auto; /* Center the toast */
+}
+.custom-toast-body {
+  font-size: 1rem; /* Adjust the font size */
+}
