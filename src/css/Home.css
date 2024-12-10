@@ -189,3 +189,10 @@ body {
   color: #2c3e50;
   padding: 10px;
 }
+
+.error-message {
+  color: rgb(79, 76, 92);
+  margin-top: 10px;
+  font-size: 20px;
+  text-align: center;
+}

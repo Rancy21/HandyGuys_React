@@ -11,7 +11,7 @@ import ReviewsList from "./pages/ReviewsList.jsx";
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <Login />,
+    element: <Home />,
   },
   {
     path: "/reset",

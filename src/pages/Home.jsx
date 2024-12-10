@@ -8,8 +8,12 @@ import axios from "axios";
 const Home = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
-  const [userData, setData] = useState(null); // State to store data
+  const [skillerror, setSkillError] = useState(false);
+  const [data, setData] = useState([]); // State to store data
+  const [updata, setUpData] = useState([]); // State to store data
   const [categories, setCategories] = useState([]);
+  const [isSearch, setIsSearch] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
     const fetchData = async () => {
@@ -24,8 +28,7 @@ const Home = () => {
           }
         );
 
-        setData(response.data);
-        console.log(response.data);
+        setUpData(response.data);
         setError(false);
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -64,138 +67,119 @@ const Home = () => {
     fetchCategories();
   }, []);
 
+  // Filter skills based on selected category
+  const onCategoryChange = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+
+    try {
+      setLoading(true);
+      const response = await axios.get(
+        `http://localhost:8080/skill/getSkillperCategory?category=${e.target.value}`
+      );
+      setSkillError(false);
+      setData(response.data);
+    } catch (fetchError) {
+      setData([])
+      setSkillError({
+        status: true,
+        message: fetchError.response?.data || "Failed to fetch skills per category",
+      });
+      toast.error("Error fetching skill per category");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const globaSearch = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    setIsSearch(true);
+
+    try {
+      setLoading(true);
+      const response = await axios.get(
+        `http://localhost:8080/skill/globalSearch?value=${searchTerm}`
+      );
+      setError(false);
+      setUpData(response.data);
+    } catch (fetchError) {
+      setUpData([])
+      setError({
+        status: true,
+        message: fetchError.response?.data || "Failed to fetch results of the global search",
+      });
+      toast.error("Error fetching global search results");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <>
       <Sidebar></Sidebar>
-      <div class="main-content">
-        <div class="search-bar">
+      <div className="main-content">
+        <div className="search-bar">
           <svg
             width="24"
             height="24"
             fill="none"
             stroke="currentColor"
-            stroke-width="2"
+            strokeWidth="2"
             viewBox="0 0 24 24"
           >
             <circle cx="11" cy="11" r="8"></circle>
             <path d="M21 21l-4.35-4.35"></path>
           </svg>
-          <input type="text" placeholder="What service do you want today ?" />
-          <button class="search-button">Search</button>
+          <input type="text" placeholder="What service do you want today ?" 
+          value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)}/>
+          <button className="search-button" onClick={globaSearch}>Search</button>
         </div>
 
-        <div class="section">
+        <div className="section">
           {/* Render error message if error exists */}
+         
+          <div className="section-header">
+            {isSearch ? <h2>Results:</h2> : <h2>Featured helpers</h2>}
+          </div>
           {error && typeof error === "object" ? (
             <div className="error-message">{error.message}</div>
           ) : (
             error && <div className="error-message">{error}</div>
           )}
-          <div class="section-header">
-            <h2>Featured helpers</h2>
-            <a href="#" class="see-more">
-              see more
-            </a>
-          </div>
-          <div class="helper-cards">
-            <HelperCard
+          <div className="helper-cards">
+            {/* <HelperCard
               name={"Paola Diele"}
               category={"Baddie"}
               description={"Born to slay!"}
-            />
-            <div class="helper-card">
-              <div class="helper-name">Basil Jones</div>
-              <div class="helper-profession">Electrician</div>
-              <div class="helper-stats">
-                <div class="helper-rating">
-                  <span class="rating-stars">★★★★½</span>
-                  4.5
-                </div>
-                <div class="helper-reviews">2.5k reviews</div>
-              </div>
-              <div class="helper-description">
-                Experienced electrician specializing in residential and
-                commercial electrical systems. Expert in wiring installations,
-                circuit repairs, and LED lighting solutions. Licensed
-                professional with 10+ years of experience in delivering safe and
-                reliable electrical services.Experienced electrician
-                specializing in residential and commercial electrical systems.
-                Expert in wiring installations, circuit repairs, and LED
-                lighting solutions. Licensed professional with 10+ years of
-                experience in delivering safe and reliable electrical services.
-              </div>
-              <button class="chat-button">Chat</button>
-            </div>
-            <div class="helper-card">
-              <div class="helper-name">John Wick</div>
-              <div class="helper-profession">Plumber</div>
-              <div class="helper-stats">
-                <span class="helper-rating">
-                  <span class="rating-stars">★★★★½</span>
-                  4.5
-                </span>
-                <span class="helper-reviews">1.4k reviews</span>
-              </div>
-              <div class="helper-description">
-                Master plumber with expertise in both emergency repairs and
-                planned installations. Specializes in leak detection, pipe
-                installation, and water heater maintenance. Known for quick
-                response times and thorough problem-solving approach.
-              </div>
-              <button class="chat-button">Chat</button>
-            </div>
+            /> */}
+            {updata.map((skill) => (
+              <HelperCard skill={skill}/>
+           ))}
           </div>
         </div>
 
-        <div class="section">
-          <div class="section-header">
+        <div className="section">
+          <div className="section-header">
             <h2>Category Helpers</h2>
           </div>
-          <select class="category-select">
-            <option value="">Select Category</option>
+          <select className="category-select" onChange={onCategoryChange}>
+            <option value="" >Select a category</option>
             {categories.map((cat) => (
               <option key={cat} value={cat}>
                 {cat}
               </option>
             ))}
           </select>
-          <div class="helper-cards">
-            <div class="helper-card">
-              <div class="helper-name">Mike Wilson</div>
-              <div class="helper-profession">Electrician</div>
-              <div class="helper-stats">
-                <span class="helper-rating">
-                  <span class="rating-stars">★★★★★</span>
-                  4.8
-                </span>
-                <span class="helper-reviews">1.2k reviews</span>
-              </div>
-              <div class="helper-description">
-                Smart home installation specialist with deep knowledge of modern
-                electrical systems. Certified in advanced troubleshooting and
-                emergency repairs. Extensive experience in residential and
-                commercial electrical panel upgrades.
-              </div>
-              <button class="chat-button">Chat</button>
-            </div>
-            <div class="helper-card">
-              <div class="helper-name">Sarah Chen</div>
-              <div class="helper-profession">Electrician</div>
-              <div class="helper-stats">
-                <span class="helper-rating">
-                  <span class="rating-stars">★★★★½</span>
-                  4.6
-                </span>
-                <span class="helper-reviews">980 reviews</span>
-              </div>
-              <div class="helper-description">
-                Industrial and commercial electrical expert specializing in
-                solar installations and EV charging stations. Certified in
-                renewable energy systems with focus on energy-efficient
-                solutions and sustainable electrical infrastructure.
-              </div>
-              <button class="chat-button">Chat</button>
-            </div>
+          {skillerror && typeof skillerror === "object" ? (
+            <div className="error-message">{skillerror.message}</div>
+          ) : (
+            skillerror && <div className="error-message">{skillerror}</div>
+          )}
+          <div className="helper-cards">
+            {data.map((skill) => (
+              <HelperCard skill={skill}/>
+           ))}
           </div>
         </div>
       </div>

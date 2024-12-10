@@ -39,8 +39,16 @@ const Login = () => {
             headers: { "Content-Type": "application/json" },
           }
         );
-
-        navigate("/home");
+        if(data.email == "youarenotthebossofme@gmail.com"){
+          navigate("/review");
+        }
+        else if(data.isHandy == true){
+          navigate("/profile");
+        }
+        else{
+          navigate("/home");
+        }
+        
       } else {
         setError("Incorrect password");
       }

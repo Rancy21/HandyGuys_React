@@ -1,21 +1,21 @@
 import React from 'react'
 
-function HelperCard({name, category, description}) {
+function HelperCard({skill}) {
   return (
-    <div><div class="helper-card">
-    <div class="helper-name">{name}</div>
-    <div class="helper-profession">{category}</div>
-    <div class="helper-stats">
-      <div class="helper-rating">
-        <span class="rating-stars">★★★★½</span>
+    <div><div className="helper-card">
+    <div className="helper-name">{skill.handyGuy.firstName} {skill.handyGuy.lastName}</div>
+    <div className="helper-profession">{skill.category}</div>
+    <div className="helper-stats">
+      <div className="helper-rating">
+        <span className="rating-stars">★★★★½</span>
         4.5
       </div>
-      <div class="helper-reviews">2.5k reviews</div>
+      <div className="helper-reviews">2.5k reviews</div>
     </div>
-    <div class="helper-description">
-      {description}
+    <div className="helper-description">
+      {skill.description}
     </div>
-    <button class="chat-button">Chat</button>
+    <button className="chat-button">Chat</button>
   </div></div>
   )
 }
