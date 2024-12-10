@@ -2,16 +2,18 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { User, Lock, Mail, Phone } from "lucide-react";
 import { useNavigate } from "react-router";
+import { useDispatch } from "react-redux";
+import { login } from "../store/userSlice";
 import "../css/sign.css";
 import { getToday } from "../components/Helper";
 import { toast, ToastContainer } from "react-toastify";
-
 const Signup = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState({
     status: false,
-    message: "",
+    message: ""
   });
   const [categories, setCategories] = useState([]);
   const [formData, setFormData] = useState({
@@ -24,8 +26,8 @@ const Signup = () => {
     isHandy: false,
     skill: {
       category: "",
-      description: "",
-    },
+      description: ""
+    }
   });
 
   // Fetch categories on component mount
@@ -40,7 +42,7 @@ const Signup = () => {
       } catch (fetchError) {
         setError({
           status: true,
-          message: fetchError.response?.data || "Failed to fetch categories",
+          message: fetchError.response?.data || "Failed to fetch categories"
         });
         toast.error("Error fetching categories");
       } finally {
@@ -56,7 +58,7 @@ const Signup = () => {
     const { name, value, type, checked } = e.target;
     setFormData((prev) => ({
       ...prev,
-      [name]: type === "checkbox" ? checked : value,
+      [name]: type === "checkbox" ? checked : value
     }));
   };
 
@@ -67,8 +69,8 @@ const Signup = () => {
       ...prev,
       skill: {
         ...prev.skill,
-        [name]: value,
-      },
+        [name]: value
+      }
     }));
   };
 
@@ -76,7 +78,7 @@ const Signup = () => {
   const saveSkill = async () => {
     const skillData = {
       category: formData.skill.category,
-      description: formData.skill.description,
+      description: formData.skill.description
     };
 
     try {
@@ -99,7 +101,7 @@ const Signup = () => {
       phoneNumber: formData.phoneNumber,
       password: formData.password,
       isHandy: formData.isHandy,
-      signUpDate: getToday(),
+      signUpDate: getToday()
     };
 
     try {
@@ -109,6 +111,8 @@ const Signup = () => {
       if (formData.isHandy) {
         await saveSkill();
       }
+      // Dispatch the login action to save user data in the Redux store
+      dispatch(login({ user: userData }));
 
       // Navigate to login page
       toast.success("User saved successfully");
@@ -117,7 +121,7 @@ const Signup = () => {
       toast.error("Failed to save user");
       setError({
         status: true,
-        message: saveError.response?.data || "Failed to save user",
+        message: saveError.response?.data || "Failed to save user"
       });
     }
   };
@@ -131,7 +135,7 @@ const Signup = () => {
     if (formData.password !== formData.confirmPassword) {
       setError({
         status: true,
-        message: "Passwords do not match",
+        message: "Passwords do not match"
       });
       return;
     }
@@ -143,7 +147,7 @@ const Signup = () => {
     ) {
       setError({
         status: true,
-        message: "Please select a skill category and provide a description",
+        message: "Please select a skill category and provide a description"
       });
       return;
     }

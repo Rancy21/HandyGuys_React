@@ -4,9 +4,12 @@ import { getToday } from "../components/Helper";
 import { useNavigate } from "react-router";
 import axios from "axios";
 import "../css/login.css";
+import { useDispatch } from "react-redux";
+import { login, logout } from "../store/userSlice";
 
 const Login = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [email, setEmail] = useState("");
@@ -27,7 +30,7 @@ const Login = () => {
     try {
       const response = await axios.get(`http://localhost:8080/users/getUser`, {
         params: { email },
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json" }
       });
 
       const data = response.data;
@@ -36,14 +39,15 @@ const Login = () => {
       if (data.password === password) {
         localStorage.setItem("token", data.token);
 
-        const getOtp = await axios.get(`http://localhost:8080/users/sendOTPbyEmail?to=${email}`);
+        const getOtp = await axios.get(
+          `http://localhost:8080/users/sendOTPbyEmail?to=${email}`
+        );
         setServerOTP(getOtp.data.otp);
         console.log("OTP sent " + getOtp.data.otp);
         setStep1(false);
         setStep2(true);
         setLoading(false);
-
-        
+        dispatch(login({ user: data }));
       } else {
         setError("Incorrect password");
       }
@@ -61,7 +65,7 @@ const Login = () => {
     setLoading(true);
     setError("");
 
-    if(OTP == serverOTP) {
+    if (OTP == serverOTP) {
       try {
         const tracker = { date: getToday() };
         const response = await axios.post(
@@ -69,16 +73,14 @@ const Login = () => {
           tracker,
           {
             params: { userEmail: email },
-            headers: { "Content-Type": "application/json" },
+            headers: { "Content-Type": "application/json" }
           }
         );
-        if(userData.email == "Larryckontsandaga21@gmail.com"){
+        if (userData.email == "Larryckontsandaga21@gmail.com") {
           navigate("/review");
-        }
-        else if(userData.isHandy == true){
+        } else if (userData.isHandy == true) {
           navigate("/profile");
-        }
-        else{
+        } else {
           navigate("/home");
         }
       } catch (error) {
@@ -88,11 +90,11 @@ const Login = () => {
       } finally {
         setLoading(false);
       }
-
-    }else {
-        setError(true);
-        setError("Invalid OTP");
-        setLoading(false);
+    } else {
+      setError(true);
+      setError("Invalid OTP");
+      setLoading(false);
+      dispatch(logout());
     }
   };
 
@@ -115,66 +117,69 @@ const Login = () => {
 
           {step1 && (
             <form onSubmit={handleSubmit}>
-            <div className="login-inputContainer">
-              <Mail className="login-icon" />
-              <input
-                type="email"
-                placeholder="Email Address"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className="login-input"
-                required
-              />
-            </div>
+              <div className="login-inputContainer">
+                <Mail className="login-icon" />
+                <input
+                  type="email"
+                  placeholder="Email Address"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  className="login-input"
+                  required
+                />
+              </div>
 
-            <div className="login-inputContainer">
-              <Lock className="login-icon" />
-              <input
-                type="password"
-                placeholder="Password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                className="login-input"
-                required
-              />
-            </div>
+              <div className="login-inputContainer">
+                <Lock className="login-icon" />
+                <input
+                  type="password"
+                  placeholder="Password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  className="login-input"
+                  required
+                />
+              </div>
 
-            <button
-              type="submit"
-              className="login-submitButton"
-              onMouseOut={(e) => (e.target.className = "login-submitButton")}
-            >
-              {loading ? "Loading..." : "Login"}
-            </button>
-          </form>
+              <button
+                type="submit"
+                className="login-submitButton"
+                onMouseOut={(e) => (e.target.className = "login-submitButton")}
+              >
+                {loading ? "Loading..." : "Login"}
+              </button>
+            </form>
           )}
-          
+
           {step2 && (
             <form onSubmit={onOTPsubmit}>
               <div className="login-switchText">
-            <p>
-                Enter the One Time Password (OTP) that was sent to your email address. 
-                </p><br />
-          </div>
-            <div className="login-inputContainer">
-            <Lock className="login-icon" />
+                <p>
+                  Enter the One Time Password (OTP) that was sent to your email
+                  address.
+                </p>
+                <br />
+              </div>
+              <div className="login-inputContainer">
+                <Lock className="login-icon" />
                 <input
-                    type="number"
-                    placeholder="OTP"
-                    value={OTP}
-                    onChange={(e) => setOTP(e.target.value)}
-                    className="login-input"
-                    required />
-            </div>
+                  type="number"
+                  placeholder="OTP"
+                  value={OTP}
+                  onChange={(e) => setOTP(e.target.value)}
+                  className="login-input"
+                  required
+                />
+              </div>
 
-            <button
-              type="submit"
-              className="login-submitButton"
-              onMouseOut={(e) => (e.target.className = "login-submitButton")}
-            >
-              {loading ? "Loading..." : "Login"}
-            </button>
-          </form>
+              <button
+                type="submit"
+                className="login-submitButton"
+                onMouseOut={(e) => (e.target.className = "login-submitButton")}
+              >
+                {loading ? "Loading..." : "Login"}
+              </button>
+            </form>
           )}
 
           <div className="login-switchText">
@@ -185,16 +190,15 @@ const Login = () => {
               </a>
             </p>
           </div>
-          {step1 &&(
+          {step1 && (
             <div className="login-switchText">
-            <p>
-              <a href="/reset" className="login-switchLink">
-              Forgot Password?
-              </a>
-            </p>
-          </div>
+              <p>
+                <a href="/reset" className="login-switchLink">
+                  Forgot Password?
+                </a>
+              </p>
+            </div>
           )}
-          
         </div>
       </div>
     </div>
