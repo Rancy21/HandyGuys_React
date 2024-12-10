@@ -8,15 +8,16 @@ import ResetPassword from "./pages/ResetPassword.jsx";
 import Review from "./pages/Review.jsx";
 import ReviewsList from "./pages/ReviewsList.jsx";
 import Helpers from "./admin pages/Helpers.jsx";
+import UsersManagement from "./admin pages/Users.jsx";
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <Login />,
+    element: <Login />
   },
   {
     path: "/reset",
-    element: <ResetPassword />,
+    element: <ResetPassword />
   },
   {
     path: "/home",
@@ -41,6 +42,10 @@ const router = createBrowserRouter([
   {
     path: "/helpers",
     element: <Helpers />
+  },
+  {
+    path: "/users",
+    element: <UsersManagement />
   }
 ]);
 
