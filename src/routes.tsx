@@ -7,11 +7,12 @@ import Signup from "./pages/SignUp.jsx";
 import ResetPassword from "./pages/ResetPassword.jsx";
 import Review from "./pages/Review.jsx";
 import ReviewsList from "./pages/ReviewsList.jsx";
+import Helpers from "./admin pages/Helpers.jsx";
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <Home />,
+    element: <Login />,
   },
   {
     path: "/reset",
@@ -19,24 +20,28 @@ const router = createBrowserRouter([
   },
   {
     path: "/home",
-    element: <Home />,
+    element: <Home />
   },
   {
     path: "/sign",
-    element: <Signup />,
+    element: <Signup />
   },
   {
     path: "/profile",
-    element: <Profile />,
+    element: <Profile />
   },
   {
     path: "/review",
-    element: <Review />,
+    element: <Review />
   },
   {
     path: "/reviewsList",
-    element: <ReviewsList />,
+    element: <ReviewsList />
   },
+  {
+    path: "/helpers",
+    element: <Helpers />
+  }
 ]);
 
 export default router;
