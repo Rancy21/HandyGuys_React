@@ -8,9 +8,9 @@ import ClipLoader from 'react-spinners/ClipLoader';
 const ResetPassword = () => {
     const navigate = useNavigate();
 
-    const [isStep1, setSetp1] = useState(true);
-    const [isStep2, setSetp2] = useState(false);
-    const [isStep3, setSetp3] = useState(false);
+    const [isStep1, setStep1] = useState(true);
+    const [isStep2, setStep2] = useState(false);
+    const [isStep3, setStep3] = useState(false);
 
     const [error, setError] = useState(false);
     const [errorMessage, setErrorMessage] = useState("");
@@ -53,8 +53,8 @@ const ResetPassword = () => {
             const getOtp = await axios.get(`http://localhost:8080/users/sendOTPbyEmail?to=${email}`);
             setServerOTP(getOtp.data.otp);
             console.log("OTP sent " + getOtp.data.otp);
-            setSetp1(false);
-            setSetp2(true);
+            setStep1(false);
+            setStep2(true);
             setLoading(false);
 
           }
@@ -68,8 +68,8 @@ const ResetPassword = () => {
     const handleSubmit2 = async (e) => {
         e.preventDefault();
         if(OTP == serverOTP) {
-            setSetp2(false);
-            setSetp3(true);
+            setStep2(false);
+            setStep3(true);
         }else {
             setError(true);
             setErrorMessage("Invalid OTP");

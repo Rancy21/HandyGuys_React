@@ -96,7 +96,7 @@ const Home = () => {
     setLoading(true);
     setIsSearch(true);
     searchTerm.trim();
-    if(searchTerm.length = 0) {
+    if(searchTerm.length === 0) {
       setIsSearch(false);
       return;
     }

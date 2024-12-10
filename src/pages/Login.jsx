@@ -36,24 +36,13 @@ const Login = () => {
       if (data.password === password) {
         localStorage.setItem("token", data.token);
 
-        const tracker = { date: getToday() };
-        const trackerResponse = await axios.post(
-          `http://localhost:8080/loginTracker/saveTracker`,
-          tracker,
-          {
-            params: { userEmail: email },
-            headers: { "Content-Type": "application/json" },
-          }
-        );
-        if(data.email == "youarenotthebossofme@gmail.com"){
-          navigate("/review");
-        }
-        else if(data.isHandy == true){
-          navigate("/profile");
-        }
-        else{
-          navigate("/home");
-        }
+        const getOtp = await axios.get(`http://localhost:8080/users/sendOTPbyEmail?to=${email}`);
+        setServerOTP(getOtp.data.otp);
+        console.log("OTP sent " + getOtp.data.otp);
+        setStep1(false);
+        setStep2(true);
+        setLoading(false);
+
         
       } else {
         setError("Incorrect password");
@@ -64,6 +53,46 @@ const Login = () => {
       );
     } finally {
       setLoading(false);
+    }
+  };
+
+  const onOTPsubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    setError("");
+
+    if(OTP == serverOTP) {
+      try {
+        const tracker = { date: getToday() };
+        const response = await axios.post(
+          `http://localhost:8080/loginTracker/saveTracker`,
+          tracker,
+          {
+            params: { userEmail: email },
+            headers: { "Content-Type": "application/json" },
+          }
+        );
+        if(userData.email == "Larryckontsandaga21@gmail.com"){
+          navigate("/review");
+        }
+        else if(userData.isHandy == true){
+          navigate("/profile");
+        }
+        else{
+          navigate("/home");
+        }
+      } catch (error) {
+        setError(
+          `Error: ${error.response ? error.response.data : error.message}`
+        );
+      } finally {
+        setLoading(false);
+      }
+
+    }else {
+        setError(true);
+        setError("Invalid OTP");
+        setLoading(false);
     }
   };
 
@@ -121,15 +150,20 @@ const Login = () => {
           )}
           
           {step2 && (
-            <form onSubmit={handleSubmit}>
-            <div style={styles.inputContainer}>
-                <Lock style={styles.icon} />
+            <form onSubmit={onOTPsubmit}>
+              <div className="login-switchText">
+            <p>
+                Enter the One Time Password (OTP) that was sent to your email address. 
+                </p><br />
+          </div>
+            <div className="login-inputContainer">
+            <Lock className="login-icon" />
                 <input
                     type="number"
                     placeholder="OTP"
                     value={OTP}
                     onChange={(e) => setOTP(e.target.value)}
-                    style={styles.input}
+                    className="login-input"
                     required />
             </div>
 
@@ -151,13 +185,16 @@ const Login = () => {
               </a>
             </p>
           </div>
-          <div className="login-switchText">
+          {step1 &&(
+            <div className="login-switchText">
             <p>
               <a href="/reset" className="login-switchLink">
               Forgot Password?
               </a>
             </p>
           </div>
+          )}
+          
         </div>
       </div>
     </div>
