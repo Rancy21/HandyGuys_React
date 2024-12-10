@@ -199,39 +199,3 @@ body {
   font-size: 20px;
   text-align: center;
 }
-
-.star {
-  display: inline-block;
-  width: 20px;
-  height: 20px;
-  background-size: cover;
-  margin-right: 2px;
-  position: relative;
-  clip-path: polygon(
-    50% 0%,
-    61% 35%,
-    98% 35%,
-    68% 57%,
-    79% 91%,
-    50% 70%,
-    21% 91%,
-    32% 57%,
-    2% 35%,
-    39% 35%
-  );
-}
-
-.star.filled {
-  background: url("data:image/svg+xml;base64,PHN2ZyBmaWxsPSIjRkZENzAwIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCm94PSIwIDAgMjQgMjQiPjxwYXRoIGQ9Ik0xMS45OTkgMi42Mkw4LjY5IDkuNzcgMiAyLjE1bDYuOTcgMS40IDEuMDItNkwxMiAyLjY0em0wIDAtNiAxLjIzIDFMMCAyLjQgMTFsIC03LTYuMiBMTDMuMSAyNGwtNSA1IDRMIDI0IDJMIDQuNSA0N3YyMy40IHoiLz48L3N2Zz4=")
-    no-repeat center center;
-}
-
-.star.partial {
-  background: linear-gradient(to right, #ffd700 50%, transparent 50%);
-  background-clip: content-box;
-}
-
-.star.empty {
-  border: 2px solid #ffd700;
-  background: none;
-}
