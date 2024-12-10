@@ -58,7 +58,9 @@ function HelperCard({ skill }) {
             </span>
             {skill.rating.avgRating.toFixed(1)}
           </div>
-          <div className="helper-reviews">2.5k reviews</div>
+          <div className="helper-reviews">
+            {skill.rating.numberOfRatings} reviews
+          </div>
         </div>
         <div className="helper-description">{skill.description}</div>
         <button className="chat-button">Chat</button>
