@@ -4,9 +4,11 @@ import "../css/Home.css";
 import HelperCard from "../components/HelperCard";
 import { toast } from "react-toastify";
 import axios from "axios";
+import { useSelector } from "react-redux";
 
 const Home = () => {
   const [loading, setLoading] = useState(false);
+  const user = useSelector((state) => state.user);
   const [error, setError] = useState(false);
   const [skillerror, setSkillError] = useState(false);
   const [data, setData] = useState([]); // State to store data
@@ -179,7 +181,11 @@ const Home = () => {
             Search
           </button>
         </div>
-
+        <div className="section">
+          <div className="section-header">
+            {user && <p>Welcome {`${user.firstName} ${user.lastName}`}</p>}
+          </div>
+        </div>
         <div className="section">
           {/* Render error message if error exists */}
 

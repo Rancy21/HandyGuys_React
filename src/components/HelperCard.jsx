@@ -1,5 +1,6 @@
 import React from "react";
 import { Star } from "lucide-react";
+import { Reviews } from "@mui/icons-material";
 
 function HelperCard({ skill }) {
   const generateStars = (rating) => {
@@ -54,13 +55,25 @@ function HelperCard({ skill }) {
         <div className="helper-stats">
           <div className="helper-rating">
             <span className="rating-stars">
-              {generateStars(skill.rating.avgRating)}
+              {skill.rating && skill.rating.avgRating
+                ? generateStars(skill.rating.avgRating)
+                : generateStars(0)}
             </span>
-            {skill.rating.avgRating.toFixed(1)}
+            {skill.rating ? skill.rating.avgRating.toFixed(1) : "0.0"}
           </div>
-          <div className="helper-reviews">
-            {skill.rating.numberOfRatings} reviews
-          </div>
+          {skill.rating && skill.rating.numberOfRatings ? (
+            skill.rating.numberOfRatings === 1 ? (
+              <div className="helper-reviews">
+                {skill.rating.numberOfRatings} review
+              </div>
+            ) : (
+              <div className="helper-reviews">
+                {skill.rating.numberOfRatings} reviews
+              </div>
+            )
+          ) : (
+            <div className="helper-reviews">No reviews yet</div>
+          )}
         </div>
         <div className="helper-description">{skill.description}</div>
         <button className="chat-button">Chat</button>
