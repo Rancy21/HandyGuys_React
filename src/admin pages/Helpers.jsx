@@ -28,6 +28,7 @@ import { ThemeProvider } from "@mui/material/styles";
 import { theme } from "../components/Helper";
 import { People, Category, Star } from "@mui/icons-material";
 import { TextField } from "@mui/material";
+import Sidebar from "../components/AdminSide";
 
 const Helpers = () => {
   // State variables
@@ -163,7 +164,15 @@ const Helpers = () => {
 
   return (
     <ThemeProvider theme={theme}>
-      <Box sx={{ padding: 3, backgroundColor: "#f5f7fa", minHeight: "100vh" }}>
+      <Box
+        sx={{
+          flexGrow: 1,
+          p: 3,
+          width: { sm: `calc(100% - 240px)` },
+          ml: "240px"
+        }}
+      >
+        <Sidebar />
         <Typography
           variant="h4"
           sx={{
