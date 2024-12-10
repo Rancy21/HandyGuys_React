@@ -95,7 +95,11 @@ const Home = () => {
     e.preventDefault();
     setLoading(true);
     setIsSearch(true);
-
+    searchTerm.trim();
+    if(searchTerm.length = 0) {
+      setIsSearch(false);
+      return;
+    }
     try {
       setLoading(true);
       const response = await axios.get(

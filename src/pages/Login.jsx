@@ -13,6 +13,12 @@ const Login = () => {
   const [password, setPassword] = useState("");
   const [userData, setUserData] = useState(null);
 
+  const [step1, setStep1] = useState(true);
+  const [step2, setStep2] = useState(false);
+
+  const [OTP, setOTP] = useState("");
+  const [serverOTP, setServerOTP] = useState(0);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -78,7 +84,8 @@ const Login = () => {
 
           {error && <p className="login-error">{error}</p>}
 
-          <form onSubmit={handleSubmit}>
+          {step1 && (
+            <form onSubmit={handleSubmit}>
             <div className="login-inputContainer">
               <Mail className="login-icon" />
               <input
@@ -111,6 +118,30 @@ const Login = () => {
               {loading ? "Loading..." : "Login"}
             </button>
           </form>
+          )}
+          
+          {step2 && (
+            <form onSubmit={handleSubmit}>
+            <div style={styles.inputContainer}>
+                <Lock style={styles.icon} />
+                <input
+                    type="number"
+                    placeholder="OTP"
+                    value={OTP}
+                    onChange={(e) => setOTP(e.target.value)}
+                    style={styles.input}
+                    required />
+            </div>
+
+            <button
+              type="submit"
+              className="login-submitButton"
+              onMouseOut={(e) => (e.target.className = "login-submitButton")}
+            >
+              {loading ? "Loading..." : "Login"}
+            </button>
+          </form>
+          )}
 
           <div className="login-switchText">
             <p>
