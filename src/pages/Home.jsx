@@ -14,27 +14,39 @@ const Home = () => {
   const [categories, setCategories] = useState([]);
   const [isSearch, setIsSearch] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
+  const [featured, setFeatured] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         setLoading(true);
         const response = await axios.get(
-          "http://localhost:8080/skill/getAllSkills",
+          "http://localhost:8080/review/getTopRating",
           {
             headers: {
-              "Content-Type": "application/json",
-            },
+              "Content-Type": "application/json"
+            }
           }
         );
 
-        setUpData(response.data);
+        const transformedData = response.data.map((skill) => {
+          if (skill.category === "Electrical_repair") {
+            skill.category = "Electrical Repair";
+          } else if (skill.category === "Event_Planing") {
+            skill.category = "Event Planing";
+          } else if (skill.category === "WoodWorking") {
+            skill.category = "Wood Working";
+          }
+          return skill;
+        });
+        setFeatured(transformedData);
+        console.log(response.data);
         setError(false);
       } catch (error) {
         console.error("Error fetching data:", error);
         setError({
           status: true,
-          message: error.response?.data || "Sorry, something went wrong",
+          message: error.response?.data || "Sorry, something went wrong"
         });
       } finally {
         setLoading(false);
@@ -56,7 +68,7 @@ const Home = () => {
       } catch (fetchError) {
         setError({
           status: true,
-          message: fetchError.response?.data || "Failed to fetch categories",
+          message: fetchError.response?.data || "Failed to fetch categories"
         });
         toast.error("Error fetching categories");
       } finally {
@@ -78,12 +90,23 @@ const Home = () => {
         `http://localhost:8080/skill/getSkillperCategory?category=${e.target.value}`
       );
       setSkillError(false);
-      setData(response.data);
+      const transformedData = response.data.map((skill) => {
+        if (skill.category === "Electrical_repair") {
+          skill.category = "Electrical Repair";
+        } else if (skill.category === "Event_Planing") {
+          skill.category = "Event Planing";
+        } else if (skill.category === "WoodWorking") {
+          skill.category = "Wood Working";
+        }
+        return skill;
+      });
+      setData(transformedData);
     } catch (fetchError) {
-      setData([])
+      setData([]);
       setSkillError({
         status: true,
-        message: fetchError.response?.data || "Failed to fetch skills per category",
+        message:
+          fetchError.response?.data || "Failed to fetch skills per category"
       });
       toast.error("Error fetching skill per category");
     } finally {
@@ -95,8 +118,7 @@ const Home = () => {
     e.preventDefault();
     setLoading(true);
     setIsSearch(true);
-    searchTerm.trim();
-    if(searchTerm.length = 0) {
+    if (searchTerm.trim().length === 0) {
       setIsSearch(false);
       return;
     }
@@ -106,12 +128,24 @@ const Home = () => {
         `http://localhost:8080/skill/globalSearch?value=${searchTerm}`
       );
       setError(false);
-      setUpData(response.data);
+      const transformedData = response.data.map((skill) => {
+        if (skill.category === "Electrical_repair") {
+          skill.category = "Electrical Repair";
+        } else if (skill.category === "Event_Planing") {
+          skill.category = "Event Planing";
+        } else if (skill.category === "WoodWorking") {
+          skill.category = "Wood Working";
+        }
+        return skill;
+      });
+      setUpData(transformedData);
     } catch (fetchError) {
-      setUpData([])
+      setUpData([]);
       setError({
         status: true,
-        message: fetchError.response?.data || "Failed to fetch results of the global search",
+        message:
+          fetchError.response?.data ||
+          "Failed to fetch results of the global search"
       });
       toast.error("Error fetching global search results");
     } finally {
@@ -121,7 +155,7 @@ const Home = () => {
 
   return (
     <>
-      <Sidebar></Sidebar>
+      <Sidebar />
       <div className="main-content">
         <div className="search-bar">
           <svg
@@ -135,14 +169,20 @@ const Home = () => {
             <circle cx="11" cy="11" r="8"></circle>
             <path d="M21 21l-4.35-4.35"></path>
           </svg>
-          <input type="text" placeholder="What service do you want today ?" 
-          value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)}/>
-          <button className="search-button" onClick={globaSearch}>Search</button>
+          <input
+            type="text"
+            placeholder="What service do you want today ?"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
+          <button className="search-button" onClick={globaSearch}>
+            Search
+          </button>
         </div>
 
         <div className="section">
           {/* Render error message if error exists */}
-         
+
           <div className="section-header">
             {isSearch ? <h2>Results:</h2> : <h2>Featured helpers</h2>}
           </div>
@@ -152,14 +192,13 @@ const Home = () => {
             error && <div className="error-message">{error}</div>
           )}
           <div className="helper-cards">
-            {/* <HelperCard
-              name={"Paola Diele"}
-              category={"Baddie"}
-              description={"Born to slay!"}
-            /> */}
-            {updata.map((skill) => (
-              <HelperCard skill={skill}/>
-           ))}
+            {isSearch
+              ? updata.map((skill) => (
+                  <HelperCard key={skill.id} skill={skill} />
+                ))
+              : featured.map((skill) => (
+                  <HelperCard key={skill.id} skill={skill} />
+                ))}{" "}
           </div>
         </div>
 
@@ -168,7 +207,7 @@ const Home = () => {
             <h2>Category Helpers</h2>
           </div>
           <select className="category-select" onChange={onCategoryChange}>
-            <option value="" >Select a category</option>
+            <option value="">Select a category</option>
             {categories.map((cat) => (
               <option key={cat} value={cat}>
                 {cat}
@@ -182,8 +221,8 @@ const Home = () => {
           )}
           <div className="helper-cards">
             {data.map((skill) => (
-              <HelperCard skill={skill}/>
-           ))}
+              <HelperCard key={skill.id} skill={skill} />
+            ))}
           </div>
         </div>
       </div>
