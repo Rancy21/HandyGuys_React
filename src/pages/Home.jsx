@@ -110,7 +110,6 @@ const Home = () => {
         message:
           fetchError.response?.data || "Failed to fetch skills per category"
       });
-      toast.error("Error fetching skill per category");
     } finally {
       setLoading(false);
     }
