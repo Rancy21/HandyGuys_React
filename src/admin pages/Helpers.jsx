@@ -127,7 +127,7 @@ const Helpers = () => {
         (hs.rating || "")
           .toString()
           .toLowerCase()
-          .includes(ratingSearchTerm.toLowerCase())
+          .includes(ratingSearchTerm.toLowerCase()) ||(hs.rating == null && ratingSearchTerm.toLowerCase() == "0")
       ) {
         return true;
       }
@@ -331,7 +331,7 @@ const Helpers = () => {
                     />
                   </TableCell>
                   <TableCell>
-                    <Rating value={0} readOnly size="small" />
+                    <Rating value={helperSkill.rating && helperSkill.rating.avgRating? helperSkill.rating.avgRating: 0} readOnly size="small" />
                   </TableCell>
                   <TableCell>
                     <Button
