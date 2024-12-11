@@ -190,3 +190,23 @@
 body {
   overflow: visible;
 }
+
+.action-button {
+  background-color: #408953;
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 20px;
+}
+
+.action-button:hover {
+  background-color: #367446;
+  transform: translateY(-2px);
+}
