@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import Sidebar from "../components/Sidebar";
 import "../css/Home.css";
 import HelperCard from "../components/HelperCard";
-import { toast } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 import axios from "axios";
 import { useSelector } from "react-redux";
 
@@ -158,6 +158,7 @@ const Home = () => {
   return (
     <>
       <Sidebar />
+      <ToastContainer />
       <div className="main-content">
         <div className="search-bar">
           <svg

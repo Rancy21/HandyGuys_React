@@ -50,7 +50,7 @@ const ResetPassword = () => {
             throw new Error(`HTTP error! status: ${response.status}`);
           }
           else{
-            const getOtp = await axios.get(`http://localhost:8080/users/sendOTPbyEmail?to=${email}`);
+            const getOtp = await axios.get(`http://localhost:8080/users/sendOTPbyEmail?to=${email}&condition=none`);
             setServerOTP(getOtp.data.otp);
             console.log("OTP sent " + getOtp.data.otp);
             setStep1(false);

@@ -41,7 +41,7 @@ const Login = () => {
         localStorage.setItem("token", data.token);
 
         const getOtp = await axios.get(
-          `http://localhost:8080/users/sendOTPbyEmail?to=${email}`
+          `http://localhost:8080/users/sendOTPbyEmail?to=${email}&condition=login`
         );
         setServerOTP(getOtp.data.otp);
         console.log("OTP sent " + getOtp.data.otp);

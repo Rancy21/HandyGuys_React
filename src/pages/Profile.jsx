@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import Sidebar from "../components/Sidebar";
 import axios from "axios";
 import "../css/profile.css";
-import { toast } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router";
 import {
@@ -79,6 +79,7 @@ const ServiceProviderProfile = () => {
         });
 
         if (userResponse.data.isHandy) {
+          setIsHandy(true);
           const skillsResponse = await axios.get(
             `http://localhost:8080/skill/getHandySkills?email=${userResponse.data.email}`
           );
@@ -97,9 +98,8 @@ const ServiceProviderProfile = () => {
   const handleAddSkill = async () => {
     try {
       const response = await axios.post(
-        "http://localhost:8080/skill/addSkill",
+        `http://localhost:8080/skill/saveSkill?email=${user.email}`,
         {
-          email: user.email,
           category: newSkill.category,
           description: newSkill.description
         }
@@ -108,21 +108,23 @@ const ServiceProviderProfile = () => {
       setShowAddSkillModal(false);
       toast.success("Skill added successfully");
     } catch (error) {
+      setShowAddSkillModal(false);
       toast.error("Failed to add skill");
     }
   };
 
   const handleUpdateProfile = async () => {
     try {
-      await axios.put(
-        `http://localhost:8080/users/updateUser/${user.userId}`,
+      await axios.post(
+        `http://localhost:8080/users/updateUser?email=${user.email}`,
         editedProfile
       );
       setUser({ ...user, ...editedProfile });
       setShowEditProfileModal(false);
       toast.success("Profile updated successfully");
     } catch (error) {
-      toast.error("Failed to update profile");
+      setShowEditProfileModal(false);
+      toast.error("Failed to update profile.");
     }
   };
 
@@ -131,6 +133,7 @@ const ServiceProviderProfile = () => {
   return (
     <>
       <Sidebar />
+      <ToastContainer />
       <div className="main-content">
         {/* Existing profile header */}
         <div className="profile-header">
@@ -249,9 +252,9 @@ const ServiceProviderProfile = () => {
                   <Rating value={skill.rating?.avgRating || 0} readOnly />
                 </div>
                 <p>{skill.description}</p>
-                <div className="skill-footer">
+                {/* <div className="skill-footer">
                   <span className="jobs-completed">23 jobs completed</span>
-                </div>
+                </div> */}
               </div>
             ))}
           </div>
@@ -322,18 +325,6 @@ const ServiceProviderProfile = () => {
                   setEditedProfile({
                     ...editedProfile,
                     phoneNumber: e.target.value
-                  })
-                }
-                variant="outlined"
-                className="modal-input"
-              />
-              <TextField
-                label="Location"
-                value={editedProfile.location}
-                onChange={(e) =>
-                  setEditedProfile({
-                    ...editedProfile,
-                    location: e.target.value
                   })
                 }
                 variant="outlined"
