@@ -182,11 +182,6 @@ const Home = () => {
           </button>
         </div>
         <div className="section">
-          <div className="section-header">
-            {user && <p>Welcome {`${user.firstName} ${user.lastName}`}</p>}
-          </div>
-        </div>
-        <div className="section">
           {/* Render error message if error exists */}
 
           <div className="section-header">
