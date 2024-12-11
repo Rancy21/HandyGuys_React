@@ -114,73 +114,75 @@ const Review = () => {
   return (
     <>
       <Sidebar />
-      <div className="review-container">
-        <ToastContainer />
-        <div className="review-wrapper">
-          <div className="review-header">
-            <div className="provider-card">
-              {handy && (
-                <>
-                  <div className="provider-avatar">{`${handy.firstName[0]}${handy.lastName[0]}`}</div>
-                  <div className="provider-details">
-                    <h2>{`${handy.firstName} ${handy.lastName}`}</h2>
-                    <p className="service-type">{skill && skill.category}</p>
-                    <div className="provider-stats">
-                      <span>
-                        <ThumbsUp size={16} /> 95% Success Rate
-                      </span>
-                      <span>
-                        <Clock size={16} /> 48 Jobs
-                      </span>
-                      <span>
-                        <MessageSquare size={16} /> 32 Reviews
-                      </span>
+      <div className="main-content">
+        <div className="review-container">
+          <ToastContainer />
+          <div className="review-wrapper">
+            <div className="review-header">
+              <div className="provider-card">
+                {handy && (
+                  <>
+                    <div className="provider-avatar">{`${handy.firstName[0]}${handy.lastName[0]}`}</div>
+                    <div className="provider-details">
+                      <h2>{`${handy.firstName} ${handy.lastName}`}</h2>
+                      <p className="service-type">{skill && skill.category}</p>
+                      <div className="provider-stats">
+                        <span>
+                          <ThumbsUp size={16} /> 95% Success Rate
+                        </span>
+                        <span>
+                          <Clock size={16} /> 48 Jobs
+                        </span>
+                        <span>
+                          <MessageSquare size={16} /> 32 Reviews
+                        </span>
+                      </div>
                     </div>
-                  </div>
-                </>
-              )}
+                  </>
+                )}
+              </div>
             </div>
-          </div>
 
-          <div className="review-content">
-            <h3>Rate Your Experience</h3>
-            {error && <div className="review-error">{error}</div>}
-            {success && <div className="review-success">{success}</div>}{" "}
-            {/* Added success message display */}
-            <div className="rating-container">
-              {[1, 2, 3, 4, 5].map((star) => (
-                <Star
-                  key={star}
-                  size={40}
-                  className={`star ${rating >= star ? "filled" : ""}`}
-                  onClick={() => handleRatingChange(star)}
+            <div className="review-content">
+              <h3>Rate Your Experience</h3>
+              {error && <div className="review-error">{error}</div>}
+              {success && <div className="review-success">{success}</div>}{" "}
+              {/* Added success message display */}
+              <div className="rating-container">
+                {[1, 2, 3, 4, 5].map((star) => (
+                  <Star
+                    key={star}
+                    size={40}
+                    className={`star ${rating >= star ? "filled" : ""}`}
+                    onClick={() => handleRatingChange(star)}
+                  />
+                ))}
+                <span className="rating-text">
+                  {rating ? `${rating} out of 5` : "Select Rating"}
+                </span>
+              </div>
+              <div className="comment-section">
+                <h3>Share Your Experience</h3>
+                <textarea
+                  placeholder={
+                    handy
+                      ? `Tell us about your experience with ${handy.firstName} ${handy.lastName}`
+                      : "Tell us about your experience"
+                  }
+                  value={comment}
+                  onChange={handleCommentChange}
+                  required
                 />
-              ))}
-              <span className="rating-text">
-                {rating ? `${rating} out of 5` : "Select Rating"}
-              </span>
+              </div>
+              <button
+                type="submit"
+                className="submit-review"
+                onClick={handleSubmit}
+                disabled={loading || !rating || !updated}
+              >
+                {loading ? "Submitting..." : "Submit Review"}
+              </button>
             </div>
-            <div className="comment-section">
-              <h3>Share Your Experience</h3>
-              <textarea
-                placeholder={
-                  handy
-                    ? `Tell us about your experience with ${handy.firstName} ${handy.lastName}`
-                    : "Tell us about your experience"
-                }
-                value={comment}
-                onChange={handleCommentChange}
-                required
-              />
-            </div>
-            <button
-              type="submit"
-              className="submit-review"
-              onClick={handleSubmit}
-              disabled={loading || !rating || !updated}
-            >
-              {loading ? "Submitting..." : "Submit Review"}
-            </button>
           </div>
         </div>
       </div>
