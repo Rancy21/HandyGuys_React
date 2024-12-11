@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import Sidebar from "../components/Sidebar";
 import "../css/Home.css";
 import HelperCard from "../components/HelperCard";
-import { toast } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 import axios from "axios";
 import { useSelector } from "react-redux";
 
@@ -158,6 +158,7 @@ const Home = () => {
   return (
     <>
       <Sidebar />
+      <ToastContainer />
       <div className="main-content">
         <div className="search-bar">
           <svg
@@ -180,11 +181,6 @@ const Home = () => {
           <button className="search-button" onClick={globaSearch}>
             Search
           </button>
-        </div>
-        <div className="section">
-          <div className="section-header">
-            {user && <p>Welcome {`${user.firstName} ${user.lastName}`}</p>}
-          </div>
         </div>
         <div className="section">
           {/* Render error message if error exists */}
