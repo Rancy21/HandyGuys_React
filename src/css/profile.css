@@ -183,3 +183,221 @@
   background: #408953;
   color: white;
 }
+
+.skill-card {
+  transition: transform 0.2s ease;
+}
+
+.skill-card:hover {
+  transform: translateY(-2px);
+}
+
+.add-skill-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.edit-profile-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.MuiDialog-paper {
+  border-radius: 12px;
+}
+
+.MuiDialogTitle-root {
+  background-color: #f8f9fa;
+}
+
+.skill-rating {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.profile-info-section {
+  margin: 2rem 0;
+  padding: 0 1rem;
+}
+
+.personal-info {
+  background: white;
+  border-radius: 16px;
+  padding: 2rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2.5rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.header-title {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.header-title h3 {
+  color: #2c3e50;
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin: 0;
+}
+
+.subtitle {
+  color: #666;
+  font-size: 0.9rem;
+}
+
+.info-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+}
+
+.info-group {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.info-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+  background: #f8f9fa;
+  border-radius: 12px;
+  transition: all 0.2s ease;
+}
+
+.info-item:hover {
+  background: #f0f2f5;
+  transform: translateY(-2px);
+}
+
+.info-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  background: #408953;
+  border-radius: 10px;
+  color: white;
+}
+
+.info-content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.info-content label {
+  color: #666;
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+.info-content span {
+  color: #2c3e50;
+  font-size: 1.1rem;
+  font-weight: 500;
+}
+
+.edit-profile-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  background: #408953;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.edit-profile-btn:hover {
+  background: #367446;
+  transform: translateY(-2px);
+}
+
+.modal-header {
+  margin-bottom: 1rem;
+}
+
+.modal-title {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.modal-title h2 {
+  color: #2c3e50;
+  font-size: 1.5rem;
+  margin: 0;
+}
+
+.modal-title span {
+  color: #666;
+  font-size: 0.9rem;
+}
+
+.modal-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.5rem;
+  margin-top: 1rem;
+}
+
+.modal-input {
+  margin: 0.75rem 0;
+}
+
+.description-input {
+  margin-top: 1.5rem;
+}
+
+.modal-actions {
+  padding: 1.5rem;
+  display: flex;
+  gap: 1rem;
+}
+
+.save-btn {
+  background-color: #408953 !important;
+  padding: 0.75rem 2rem !important;
+  text-transform: none !important;
+  font-weight: 500 !important;
+}
+
+.save-btn:hover {
+  background-color: #367446 !important;
+}
+
+.cancel-btn {
+  color: #666 !important;
+  text-transform: none !important;
+}
+
+.category-select {
+  background-color: #f8f9fa;
+}
+
+.MuiMenuItem-root {
+  padding: 1rem !important;
+}
+
+.MuiMenuItem-root:hover {
+  background-color: #f0f2f5 !important;
+}
