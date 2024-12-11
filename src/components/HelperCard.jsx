@@ -1,8 +1,10 @@
 import React from "react";
-import { Star } from "lucide-react";
-import { Reviews } from "@mui/icons-material";
+import { Star, Phone } from "lucide-react";
+import { useNavigate } from "react-router";
 
 function HelperCard({ skill }) {
+  const navigate = useNavigate();
+
   const generateStars = (rating) => {
     return [...Array(5)].map((_, index) => {
       const fillPercentage = Math.max(0, Math.min(1, rating - index));
@@ -51,7 +53,31 @@ function HelperCard({ skill }) {
         <div className="helper-name">
           {skill.handyGuy.firstName} {skill.handyGuy.lastName}
         </div>
-        <div className="helper-profession">{skill.category}</div>
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: "10px", // Adds space between category and phone
+            color: "#6B7280",
+            justifyContent: "space-between",
+            marginBottom: "10px"
+          }}
+        >
+          <div className="helper-profession">{skill.category}</div>
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              fontSize: "0.875rem"
+            }}
+          >
+            <Phone
+              size={14}
+              style={{ marginRight: "4px", fontWeight: "bold" }}
+            />
+            {skill.handyGuy.phoneNumber}
+          </div>
+        </div>
         <div className="helper-stats">
           <div className="helper-rating">
             <span className="rating-stars">
@@ -62,21 +88,43 @@ function HelperCard({ skill }) {
             {skill.rating ? skill.rating.avgRating.toFixed(1) : "0.0"}
           </div>
           {skill.rating && skill.rating.numberOfRatings ? (
-            skill.rating.numberOfRatings === 1 ? (
-              <div className="helper-reviews">
-                {skill.rating.numberOfRatings} review
-              </div>
-            ) : (
-              <div className="helper-reviews">
-                {skill.rating.numberOfRatings} reviews
-              </div>
-            )
+            <div className="helper-reviews">
+              {skill.rating.numberOfRatings === 1
+                ? `${skill.rating.numberOfRatings} review`
+                : `${skill.rating.numberOfRatings} reviews`}
+            </div>
           ) : (
             <div className="helper-reviews">No reviews yet</div>
           )}
         </div>
         <div className="helper-description">{skill.description}</div>
-        <button className="chat-button">Chat</button>
+        {skill.rating && skill.rating.avgRating ? (
+          <button
+            className="chat-button"
+            onClick={() => {
+              navigate("/reviewsList", {
+                state: {
+                  id: skill.id
+                }
+              });
+            }}
+          >
+            See Review
+          </button>
+        ) : (
+          <button
+            className="chat-button"
+            onClick={() => {
+              navigate("/review", {
+                state: {
+                  id: skill.id
+                }
+              });
+            }}
+          >
+            Give Review Now
+          </button>
+        )}
       </div>
     </div>
   );
