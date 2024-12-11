@@ -83,7 +83,9 @@ const Sidebar = ({ open, onClose }) => {
         <ListItem
           button
           onClick={() => {
-            /* Add logout logic */
+            dispatch(logout()); // Replace with actual logout action
+            persistor.purge();
+            navigate("/");
           }}
           sx={{
             "&:hover": {

@@ -6,6 +6,7 @@ import axios from "axios";
 import "../css/login.css";
 import { useDispatch } from "react-redux";
 import { login, logout } from "../store/userSlice";
+import { persistor } from "../store/store";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -95,6 +96,7 @@ const Login = () => {
       setError("Invalid OTP");
       setLoading(false);
       dispatch(logout());
+      persistor.purge();
     }
   };
 
