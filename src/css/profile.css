@@ -151,6 +151,7 @@
 
 .skill-header {
   display: flex;
+  color: #408953;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 1rem;

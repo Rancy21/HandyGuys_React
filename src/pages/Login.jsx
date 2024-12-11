@@ -78,7 +78,7 @@ const Login = () => {
           }
         );
         if (userData.email == "Larryckontsandaga21@gmail.com") {
-          navigate("/review");
+          navigate("/users");
         } else if (userData.isHandy == true) {
           navigate("/profile");
         } else {

@@ -24,7 +24,6 @@ const Sidebar = ({ open, onClose }) => {
   const location = useLocation();
 
   const menuItems = [
-    { text: "Dashboard", icon: <Dashboard />, path: "/admin/dashboard" },
     { text: "Users", icon: <People />, path: "/users" },
     {
       text: "Service Providers",
