@@ -3,6 +3,7 @@ import { useNavigate } from "react-router";
 import { Home, User, LogOut } from "lucide-react";
 import { useDispatch } from "react-redux";
 import { logout } from "../store/userSlice";
+import { persistor } from "../store/store";
 
 const Sidebar = () => {
   const navigate = useNavigate();
@@ -11,6 +12,7 @@ const Sidebar = () => {
   const handleLogout = () => {
     // Add logout logic here
     dispatch(logout()); // Replace with actual logout action
+    persistor.purge();
     navigate("/");
   };
 
