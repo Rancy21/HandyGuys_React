@@ -2,13 +2,13 @@ import React from "react";
 import { createBrowserRouter } from "react-router";
 import Login from "../src/pages/Login.jsx";
 import Home from "./Pages/Home.jsx";
-import Profile from "./Pages/Profile.jsx";
 import Signup from "./pages/SignUp.jsx";
 import ResetPassword from "./pages/ResetPassword.jsx";
 import Review from "./pages/Review.jsx";
 import ReviewsList from "./pages/ReviewsList.jsx";
 import Helpers from "./admin pages/Helpers.jsx";
 import UsersManagement from "./admin pages/Users.jsx";
+import ServiceProviderProfile from "./pages/Profile.jsx";
 
 const router = createBrowserRouter([
   {
@@ -29,7 +29,7 @@ const router = createBrowserRouter([
   },
   {
     path: "/profile",
-    element: <Profile />
+    element: <ServiceProviderProfile />
   },
   {
     path: "/review",
