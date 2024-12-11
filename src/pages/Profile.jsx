@@ -251,7 +251,7 @@ const ServiceProviderProfile = () => {
                   <h4>{skill.category}</h4>
                   <Rating value={skill.rating?.avgRating || 0} readOnly />
                 </div>
-                <p>{skill.description}</p>
+                <p style={{color: "#2c3e50"}}>{skill.description}</p>
                 {/* <div className="skill-footer">
                   <span className="jobs-completed">23 jobs completed</span>
                 </div> */}
@@ -372,33 +372,39 @@ const ServiceProviderProfile = () => {
           </DialogTitle>
           <DialogContent>
             <FormControl fullWidth className="modal-input">
-              <InputLabel>Category</InputLabel>
-              <Select
+              {/* <InputLabel>Category</InputLabel> */}
+              <select
                 value={newSkill.category}
                 onChange={(e) =>
                   setNewSkill({ ...newSkill, category: e.target.value })
                 }
                 className="category-select"
               >
+                <option value={""} disabled>
+                  Select a category
+                </option>
                 {categories.map((category) => (
-                  <MenuItem key={category} value={category}>
+                  <option key={category} value={category}>
                     {category}
-                  </MenuItem>
+                  </option>
                 ))}
-              </Select>
+              </select>
             </FormControl>
-            <TextField
-              multiline
-              rows={4}
-              label="Description"
-              value={newSkill.description}
-              onChange={(e) =>
-                setNewSkill({ ...newSkill, description: e.target.value })
-              }
-              variant="outlined"
-              className="modal-input description-input"
-              placeholder="Describe your experience and expertise in this skill..."
-            />
+            <FormControl fullWidth className="modal-input">
+              <TextField
+                            multiline
+                            rows={4}
+                            label="Description"
+                            value={newSkill.description}
+                            onChange={(e) =>
+                              setNewSkill({ ...newSkill, description: e.target.value })
+                            }
+                            variant="outlined"
+                            className="modal-input description-input"
+                            placeholder="Describe your experience and expertise in this skill..."
+                          />
+            </FormControl>
+            
           </DialogContent>
           <DialogActions className="modal-actions">
             <Button
