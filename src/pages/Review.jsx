@@ -6,8 +6,16 @@ import axios from "axios";
 import { getToday } from "../components/Helper";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { useSelector } from "react-redux";
+import { useLocation, useNavigate } from "react-router";
 
 const Review = () => {
+  const navigate = useNavigate();
+  const user = useSelector((state) => state.user);
+  if (!user.isAuthenticated) {
+    navigate("/");
+    return;
+  }
   const [rating, setRating] = useState(0);
   const [comment, setComment] = useState("");
   const [loading, setLoading] = useState(false);
@@ -20,18 +28,20 @@ const Review = () => {
     comment: "",
     rating: 0
   });
+  const location = useLocation();
+  const skillState = location.state || {};
 
   useEffect(() => {
     const fetchSkill = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:8080/skill/getSkill?id=555d8fcb-b61b-11ef-a146-5cb901ae679c" // Replace with route params
+          `http://localhost:8080/skill/getSkill?id=${skillState?.id}` // Replace with route params
         );
         setSkill(response.data);
         setHandy(response.data.handyGuy);
 
         const fetchReview = await axios.get(
-          `http://localhost:8080/review/getReview?email=larr@gmail.com&id=${response.data.id}` // Replace with route params
+          `http://localhost:8080/review/getReview?email=${user?.email}&id=${response.data.id}` // Replace with route params
         );
         if (fetchReview.data) {
           setRating(fetchReview.data.rating);
@@ -47,7 +57,7 @@ const Review = () => {
       }
     };
     fetchSkill();
-  }, []);
+  }, [skillState.id, user?.email]);
 
   const checkUpdate = (newRating, newComment) => {
     if (existing.comment !== newComment || existing.rating !== newRating) {
@@ -84,7 +94,7 @@ const Review = () => {
     };
     try {
       const response = await axios.post(
-        `http://localhost:8080/review/saveReview?skillId=${skill.id}&email=larr@gmail.com`,
+        `http://localhost:8080/review/saveReview?skillId=${skill.id}&email=${user.email}`,
         reviewData
       );
       toast.success(response.data);
@@ -141,6 +151,16 @@ const Review = () => {
                   </>
                 )}
               </div>
+              {skill && skill.rating && skill.rating.avgRating ? (
+                <button
+                  className="action-button"
+                  onClick={() =>
+                    navigate("/reviewsList", { state: { id: skill?.id } })
+                  }
+                >
+                  See List of Reviews
+                </button>
+              ) : null}
             </div>
 
             <div className="review-content">
