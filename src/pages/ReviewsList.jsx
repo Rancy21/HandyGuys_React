@@ -1,29 +1,48 @@
 import React, { useState, useEffect } from "react";
-import { Star, MessageSquare, ThumbsUp } from "lucide-react";
+import { Star, MessageSquare, ThumbsUp, Phone } from "lucide-react";
 import axios from "axios";
 import "../css/reviewsList.css";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Sidebar from "../components/Sidebar";
+import { useLocation, useNavigate } from "react-router";
+import { useSelector } from "react-redux";
 
 const ReviewsList = () => {
+  const navigate = useNavigate();
+  const user = useSelector((state) => state.user);
+  if (!user.isAuthenticated) {
+    navigate("/");
+    return;
+  }
   const [provider, setProvider] = useState(null);
   const [skill, setSkill] = useState(null);
   const [reviews, setReviews] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const location = useLocation();
+  const skillState = location.state || {};
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const [skillRes, reviewsRes] = await Promise.all([
           axios.get(
-            "http://localhost:8080/skill/getSkill?id=f42c0ac3-8a58-479e-97d5-c0419f7954e9"
+            `http://localhost:8080/skill/getSkill?id=${skillState?.id}`
           ),
           axios.get(
-            "http://localhost:8080/review/getReviewsList?id=f42c0ac3-8a58-479e-97d5-c0419f7954e9"
+            `http://localhost:8080/review/getReviewsList?id=${skillState?.id}`
           )
         ]);
+        if (skillRes.data) {
+          if (skillRes.data.category === "Electrical_repair") {
+            skillRes.data.category = "Electrical Repair";
+          } else if (skillRes.data.category === "Event_Planing") {
+            skillRes.data.category = "Event Planing";
+          } else if (skillRes.data.category === "WoodWorking") {
+            skillRes.data.category = "Wood Working";
+          }
+        }
         setSkill(skillRes.data);
         setProvider(skillRes.data.handyGuy);
         setReviews(reviewsRes.data);
@@ -72,9 +91,21 @@ const ReviewsList = () => {
                         <Star size={20} />
                         <span>{skill?.rating?.avgRating} Average</span>
                       </div>
+                      <div className="metric">
+                        <Phone size={20} />
+                        <span>{provider?.phoneNumber}</span>
+                      </div>
                     </div>
                   </div>
                 </div>
+                <button
+                  className="action-button"
+                  onClick={() =>
+                    navigate("/review", { state: { id: skillState?.id } })
+                  }
+                >
+                  Give a Review Now
+                </button>
               </div>
             )}
 
