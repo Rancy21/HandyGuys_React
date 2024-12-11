@@ -3,6 +3,8 @@ import Sidebar from "../components/Sidebar";
 import axios from "axios";
 import "../css/profile.css";
 import { toast } from "react-toastify";
+import { useSelector } from "react-redux";
+import { useNavigate } from "react-router";
 import {
   Mail,
   Phone,
@@ -28,6 +30,17 @@ import {
 } from "@mui/material";
 
 const ServiceProviderProfile = () => {
+  const navigate = useNavigate();
+  const storedUser = useSelector((state) => state.user);
+
+  useEffect(() => {
+    if(!storedUser.isAuthenticated) {
+      navigate("/");
+      return;
+    };
+  }, [navigate])
+
+  const [isHandy, setIsHandy] = useState(false);
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [skills, setSkills] = useState([]);
@@ -51,7 +64,7 @@ const ServiceProviderProfile = () => {
       try {
         const [userResponse, categoriesResponse] = await Promise.all([
           axios.get(
-            "http://localhost:8080/users/getUser?email=mike.brown@example.com"
+            `http://localhost:8080/users/getUser?email=${storedUser.email}`
           ),
           axios.get("http://localhost:8080/skill/getCategories")
         ]);
@@ -62,8 +75,7 @@ const ServiceProviderProfile = () => {
           firstName: userResponse.data.firstName,
           lastName: userResponse.data.lastName,
           email: userResponse.data.email,
-          phoneNumber: userResponse.data.phoneNumber,
-          location: "Montreal, Canada" // Add to your user model if needed
+          phoneNumber: userResponse.data.phoneNumber
         });
 
         if (userResponse.data.isHandy) {
@@ -122,22 +134,21 @@ const ServiceProviderProfile = () => {
       <div className="main-content">
         {/* Existing profile header */}
         <div className="profile-header">
-                    <div className="profile-cover"></div>         {" "}
+               <div className="profile-cover"></div>       {" "}
           <div className="profile-header-content">
-                       {" "}
+                {" "}
             <div className="profile-avatar">
-                            {`${user?.firstName[0]}${user?.lastName[0]}`}       
-                 {" "}
+                     {`${user?.firstName[0]}${user?.lastName[0]}`}       
+              {" "}
             </div>
-                       {" "}
+                {" "}
             <div className="profile-header-info">
-                            <h1>{`${user?.firstName} ${user?.lastName}`}</h1>   
-                       {" "}
+              <h1>{`${user?.firstName} ${user?.lastName}`}</h1>
+              {" "}
               <p className="profile-location">
-                                <MapPin size={16} /> Montreal, Canada          
-                   {" "}
+                  _____________________________
               </p>
-                         {" "}
+                      {" "}
             </div>
           </div>
         </div>
@@ -217,7 +228,8 @@ const ServiceProviderProfile = () => {
         </div>
 
         {/* Skills Section */}
-        <div className="profile-card skills-section">
+        {isHandy && (
+          <div className="profile-card skills-section">
           <div className="section-header">
             <h3>
               <Award size={20} /> Skills & Expertise
@@ -244,6 +256,8 @@ const ServiceProviderProfile = () => {
             ))}
           </div>
         </div>
+        )}
+        
         {/* Enhanced Edit Profile Modal */}
         <Dialog
           open={showEditProfileModal}
