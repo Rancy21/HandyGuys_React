@@ -116,7 +116,13 @@ const Signup = () => {
 
       // Navigate to login page
       toast.success("User saved successfully");
-      navigate("/");
+      if (userData.email == "Larryckontsandaga21@gmail.com") {
+        navigate("/users");
+      } else if (userData.isHandy == true) {
+        navigate("/profile");
+      } else {
+        navigate("/home");
+      }
     } catch (saveError) {
       toast.error("Failed to save user");
       setError({
