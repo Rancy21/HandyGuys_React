@@ -11,10 +11,11 @@ import { useSelector } from "react-redux";
 const ReviewsList = () => {
   const navigate = useNavigate();
   const user = useSelector((state) => state.user);
-  if (!user.isAuthenticated) {
-    navigate("/");
-    return;
-  }
+  useEffect(() => {
+    if (!user.isAuthenticated) {
+      navigate("/");
+    }
+  }, [user.isAuthenticated, navigate]);
   const [provider, setProvider] = useState(null);
   const [skill, setSkill] = useState(null);
   const [reviews, setReviews] = useState([]);
@@ -98,14 +99,16 @@ const ReviewsList = () => {
                     </div>
                   </div>
                 </div>
-                <button
-                  className="action-button"
-                  onClick={() =>
-                    navigate("/review", { state: { id: skillState?.id } })
-                  }
-                >
-                  Give a Review Now
-                </button>
+                {user.email !== provider.email ? (
+                  <button
+                    className="action-button"
+                    onClick={() =>
+                      navigate("/review", { state: { id: skillState?.id } })
+                    }
+                  >
+                    Give a Review Now
+                  </button>
+                ) : null}
               </div>
             )}
 

@@ -28,8 +28,21 @@ import { theme } from "../components/Helper";
 import { People, PersonAdd, Login } from "@mui/icons-material";
 import { TextField } from "@mui/material";
 import Sidebar from "../components/AdminSide";
+import { useSelector } from "react-redux";
+import { useNavigate } from "react-router";
 
 const UsersManagement = () => {
+  const user = useSelector((state) => state.user);
+  const navigate = useNavigate();
+  useEffect(() => {
+    if (
+      !user.isAuthenticated ||
+      user.email !== "Larryckontsandaga21@gmail.com"
+    ) {
+      navigate("/");
+      return;
+    }
+  }, [user.isAuthenticated, navigate, user.email]);
   // State variables
   const [users, setUsers] = useState([]);
   const [totalUsers, setTotalUsers] = useState(0);

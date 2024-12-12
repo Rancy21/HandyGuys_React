@@ -12,10 +12,11 @@ import { useLocation, useNavigate } from "react-router";
 const Review = () => {
   const navigate = useNavigate();
   const user = useSelector((state) => state.user);
-  if (!user.isAuthenticated) {
-    navigate("/");
-    return;
-  }
+  useEffect(() => {
+    if (!user.isAuthenticated) {
+      navigate("/");
+    }
+  }, [user.isAuthenticated, navigate]);
   const [rating, setRating] = useState(0);
   const [comment, setComment] = useState("");
   const [loading, setLoading] = useState(false);

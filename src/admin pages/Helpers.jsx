@@ -29,8 +29,20 @@ import { theme } from "../components/Helper";
 import { People, Category, Star } from "@mui/icons-material";
 import { TextField } from "@mui/material";
 import Sidebar from "../components/AdminSide";
+import { useSelector } from "react-redux";
+import { useNavigate } from "react-router";
 
 const Helpers = () => {
+  const user = useSelector((state) => state.user);
+  const navigate = useNavigate();
+  useEffect(() => {
+    if (
+      !user.isAuthenticated ||
+      user.email !== "Larryckontsandaga21@gmail.com"
+    ) {
+      navigate("/");
+    }
+  }, [user.isAuthenticated, navigate, user.email]);
   // State variables
   const [helperSkills, setHelperSkills] = useState([]);
   const [categories, setCategories] = useState([]);
@@ -127,7 +139,8 @@ const Helpers = () => {
         (hs.rating || "")
           .toString()
           .toLowerCase()
-          .includes(ratingSearchTerm.toLowerCase()) ||(hs.rating == null && ratingSearchTerm.toLowerCase() == "0")
+          .includes(ratingSearchTerm.toLowerCase()) ||
+        (hs.rating == null && ratingSearchTerm.toLowerCase() == "0")
       ) {
         return true;
       }
@@ -331,7 +344,15 @@ const Helpers = () => {
                     />
                   </TableCell>
                   <TableCell>
-                    <Rating value={helperSkill.rating && helperSkill.rating.avgRating? helperSkill.rating.avgRating: 0} readOnly size="small" />
+                    <Rating
+                      value={
+                        helperSkill.rating && helperSkill.rating.avgRating
+                          ? helperSkill.rating.avgRating
+                          : 0
+                      }
+                      readOnly
+                      size="small"
+                    />
                   </TableCell>
                   <TableCell>
                     <Button
